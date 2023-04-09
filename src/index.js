@@ -11,27 +11,76 @@ document.body.appendChild(component());
 
 (() => {
     function foo(remainingLength, cutLengthAndKerfPairs) {
-        // Check if there is a cutLength equal to remaining length (DO NOT INCLUDE KERF)
-        // Find index of highest cutLength that can be cut with remainingLength (INCLUDE KERF)
-        let highestCutLengthIndex;
+        let largestCutLengthIndex;
         for (let i = 0; i < cutLengthAndKerfPairs.length; i++) {
+            // Skip if CutPiece has already been selected
+            if (cutLengthAndKerfPairs[i].isSelected) {
+                continue;
+            }
+
+            // Check if cutLength equal to remaining length (DO NOT INCLUDE KERF)
             if (cutLengthAndKerfPairs[i].cutPiece.cutLength == remainingLength) {
                 cutLengthAndKerfPairs[i].cutPiece.isSelected = true;
                 return [ cutLengthAndKerfPairs[i].cutPiece, 0 ];
             }
 
-            if (highestCutLengthIndex == undefined && (cutLengthAndKerfPairs[i].cutPiece.cutLength + cutLengthAndKerfPairs[i].cutPiece.kerf) < remainingLength) {
-                highestCutLengthIndex = i;
+            // Find index of largest cutLength that can be cut with remainingLength (INCLUDE KERF)
+            if (largestCutLengthIndex == undefined 
+                && (cutLengthAndKerfPairs[i].cutPiece.cutWithKerf) < remainingLength
+            ) {
+                largestCutLengthIndex = i;
             }
         }
 
-        // Check if highestCutLengthIndex is still undefined - All cutLength+kerf are more than remainingLength
+        // Check if largestCutLengthIndex is still undefined - All cutLength+kerf are more than remainingLength
         // Return just remaining length
-        if (highestCutLengthIndex == undefined) {
+        if (largestCutLengthIndex == undefined) {
             return [ remainingLength ];
         }
 
-        return [...cutLengthAndKerfPairs[highestCutLengthIndex].cutPiece, foo(remainingLength - cutLengthAndKerfPairs[highestCutLengthIndex].cutPiece.cutLength - cutLengthAndKerfPairs[highestCutLengthIndex].cutPiece.kerf, cutLengthAndKerfPairs)];
+        return [...cutLengthAndKerfPairs[largestCutLengthIndex].cutPiece, foo(remainingLength - cutLengthAndKerfPairs[largestCutLengthIndex].cutPiece.cutWithKerf, cutLengthAndKerfPairs)];
+    }
+
+    function bar(remainingLength, individualCutPieces, availableCutPiecesByIndex) {
+        // Return if availableCutPiecesByIndex is empty
+        if (!availableCutPiecesByIndex.length) {
+            return;
+        }
+
+        let largestCutLengthIndex;
+        let i;
+        for (let i = 0; i < availableCutPiecesByIndex.length; i++) {
+            // Check if cutLength equal to remaining length (DO NOT INCLUDE KERF)
+            if (individualCutPieces[availableCutPiecesByIndex[i]].cutLength == remainingLength) {
+                // Remove cutPiece index from availableCutPiecesByIndex to avoid same cutPiece
+                // being selected for than once.
+                availableCutPiecesByIndex.splice(i, 1);
+
+                return [ individualCutPieces[availableCutPiecesByIndex[i]], 0 ];
+            }
+
+            // Find index of largest cutLength that can be cut with remainingLength (INCLUDE KERF)
+            if (largestCutLengthIndex == undefined 
+                && (individualCutPieces[availableCutPiecesByIndex[i]].cutWithKerf) < remainingLength
+            ) {
+                largestCutLengthIndex = i;
+            }
+        }
+
+        // Check if largestCutLengthIndex is still undefined - All cutLength+kerf are more than remainingLength
+        // Return just remaining length
+        if (largestCutLengthIndex == undefined) {
+            return [ remainingLength ];
+        }
+
+        // Remove cutPiece index from availableCutPiecesByIndex to avoid same cutPiece
+        // being selected for than once.
+        availableCutPiecesByIndex.splice(i, 1);
+
+        return [
+            ...individualCutPieces[availableCutPiecesByIndex[largestCutLengthIndex]], 
+            bar(remainingLength - individualCutPieces[availableCutPiecesByIndex[largestCutLengthIndex]].cutWithKerf, availableCutPiecesByIndex)
+        ];
     }
 
     const possibleLengthsArr2x4 = [8*12, 10*12, 12*12];
@@ -41,13 +90,30 @@ document.body.appendChild(component());
         new CutPiece(2, 4, 49.875, possibleLengthsArr2x4, 3),
     ];
 
-    let cutLengthAndKerfPairs = cutPieces.flatMap((cutPiece) => {
+    // let cutLengthAndKerfPairs = cutPieces.flatMap((cutPiece) => {
+    //     return new Array(cutPiece.quantity)
+    //         .fill({
+    //             'cutPiece': cutPiece,
+    //             'isSelected': false,
+    //         });
+    // }).sort((a,b) => b.cutPiece.cutLength - a.cutPiece.cutLength);
+
+    // Sort cutPieces by cutLength in decreasing order
+    cutPieces.sort((a,b) => b.cutLength - a.cutLength);
+
+    // Create array where each value represents a single quantity cutPiece
+    // instead of normal array of cutPieces that has any number quantity in the
+    // 'quantity' property.
+    let individualCutPieces = cutPieces.flatMap((cutPiece) => {
         return new Array(cutPiece.quantity)
-            .fill({
-                'cutPiece': cutPiece,
-                'isSelected': false,
-            });
-    }).sort((a,b) => b.cutPiece.cutLength - a.cutPiece.cutLength);
+            .fill(cutPiece);
+    });
+
+    let availableCutPiecesByIndex = Array.from(
+        {length: individualCutPieces.length},
+        (value, index) => index
+    );
+
     debugger;
-    foo(96, cutLengthAndKerfPairs);
+    bar(96, individualCutPieces, availableCutPiecesByIndex);
 })();

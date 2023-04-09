@@ -16,6 +16,10 @@ class CutPiece {
         this.quantity = quantity;
         this.kerf = kerf;
     }
+
+    get cutWithKerf() {
+        return this.cutLength + this.kerf;
+    }
 }
 
 export default CutPiece;
