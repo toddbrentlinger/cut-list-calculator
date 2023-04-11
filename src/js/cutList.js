@@ -1,6 +1,6 @@
 const cutList = {
     /**
-     * 
+     * Recursive function that returns list of CutPieces and minimal remaining length.
      * @param {Number} remainingLength 
      * @param {[CutPiece]} individualCutPieces 
      * @param {[Number]} availableCutPiecesByIndex 
@@ -12,14 +12,7 @@ const cutList = {
         if (!availableCutPiecesByIndex.length) {
             return [ remainingLength ];
         }
-
-        /**
-         * TODO: Should exit loop before end when exact length is no longer 
-         * possible in a sorted order of cut lengths.
-         * EX. 
-         * remainingLength = 5
-         * individualCutPieces = [10,8,6,4,2]
-         */
+        
         let selectedCutPieceIndex;
         for (let i = startIndex; i < availableCutPiecesByIndex.length; i++) {
 
