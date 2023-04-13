@@ -1,4 +1,30 @@
-const cutList = {
+export class CutList {
+    constructor(cutSequences = []) {
+        this.cutSequences = cutSequences;
+    }
+
+    clear() {
+        this.cutSequences = [];
+    }
+
+    push(cutSequence) {
+        // TODO: Type check
+
+        this.cutSequences.push(cutSequence);
+    }
+
+    getPrice() {
+        return this.cutSequences.reduce((accum, curr) => accum + curr.uncutPiece.price, 0);
+    }
+
+    deepCopy() {
+        let cutList = new CutList();
+        cutList.cutSequences = [...this.cutSequences];
+        return cutList;
+    }
+}
+
+export const cutList = {
     /**
      * Recursive function that returns list of CutPieces and minimal remaining length.
      * @param {Number} remainingLength 
@@ -12,7 +38,7 @@ const cutList = {
         if (!availableCutPiecesByIndex.length) {
             return [ remainingLength ];
         }
-        
+
         let selectedCutPieceIndex;
         for (let i = startIndex; i < availableCutPiecesByIndex.length; i++) {
 
