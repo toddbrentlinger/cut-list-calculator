@@ -125,68 +125,166 @@ document.body.appendChild(component());
         // Maximum number of each available lengths needed if only used that 
         // available length for all cutPieces (initialized to zero)
         let maxNumAvailableLengths = new Array(uncutPieces.length).fill(0);
+        let numAvailableLengthsCounter = new Array(uncutPieces.length).fill(0);
 
-        const totalCutLength = individualCutPieces.reduce((accum, curr) => accum + curr.cutWithKerf, 0);
-        let maxNum, availableCutPiecesByIndex, cutSequence, cutSequenceArr, bestCutList;
+        //const totalCutLength = individualCutPieces.reduce((accum, curr) => accum + curr.cutWithKerf, 0);
+        //let maxNum;
+        let availableCutPiecesByIndex, cutSequence, cutSequenceArr, bestCutList;
         let currCutList = new CutList();
 
         uncutPieces.forEach((uncutPiece, index) => {
-            maxNum = Math.ceil(totalCutLength / uncutPiece.length);
-
-            // Check that maxNum of uncutPiece.length can be used with the cutPieces required.
-            // If not, keep incrementing until reach a value that is successful.
+            //maxNum = Math.ceil(totalCutLength / uncutPiece.length);
 
             availableCutPiecesByIndex = Array.from(
                 {length: individualCutPieces.length},
                 (value, index) => index
             );
 
+            // Clear current CutList from previous loop
             currCutList.clear();
-            while (maxNum) {
-                cutSequenceArr = cutList.getCutList(uncutPiece.length, individualCutPieces, availableCutPiecesByIndex);
 
+            // Check that maxNum of uncutPiece.length can be used with the cutPieces required.
+            // If not, keep incrementing until reach a value that is successful.
+            // TODO: Do not need maxNum. Only need to check availableCutPiecesByIndex and still increment count in maxNumAvailableLengths
+            while (
+                availableCutPiecesByIndex.length 
+                //|| maxNum > 0
+            ) {
+                cutSequenceArr = cutList.getCutList(uncutPiece.length, individualCutPieces, availableCutPiecesByIndex);
+                
+                if (cutSequenceArr == undefined) {
+                    break;
+                }
+
+                // Create CutSequence instance from cutSequenceArr
                 cutSequence = new CutSequence(uncutPiece);
                 cutSequence.cutPieces = cutSequenceArr.slice(0, -1);
                 cutSequence.remainingLength = cutSequenceArr[cutSequenceArr.length - 1];
                 
+                // Add CutSequence to current CutList
                 currCutList.push(cutSequence);
-                                
-                if (cutSequence == undefined) {
-                    break;
-                }
 
-                maxNum--;
+                // Decrement counter
+                //maxNum--;
 
+                // Increment count of max number of corresponding UncutPiece
                 maxNumAvailableLengths[index]++;
             }
 
-            if ((bestCutList == undefined) || (bestCutList.getPrice() >= currCutList.getPrice())) {
+            // Check if current CutList has less price than the best CutList
+            if (
+                (bestCutList == undefined) 
+                || (bestCutList.getPrice() >= currCutList.getPrice())
+            ) {
                 bestCutList = currCutList.deepCopy();
             }
         });
-        
-        console.log('Best');
+
+        console.log('Best Initial:');
         console.log(bestCutList);
-        debugger;
 
-        // ...
+        function increment(numAvailableLengthsCounter, maxNumAvailableLengths, index = 0) {
+            // Increment value in first index of numAvailableLengthsCounter
+            // If new value exceeds value in same index of maxNumAvailableLengths
+                // Set index of numAvailableLengthsCounter to zero
+                // Increment value in next index of numAvailableLengthsCounter
+                // Repeat using recursion
 
-        possibleLengthsArr.forEach((length) => {
-            availableCutPiecesByIndex = Array.from(
-                {length: individualCutPieces.length},
-                (value, index) => index
-            );
-        
-            console.log(`Length: ${length}`);
-            while (availableCutPiecesByIndex.length) {
-                cutSequence = cutList.getCutList(length, individualCutPieces, availableCutPiecesByIndex);
-                console.log(cutSequence);
-                if (cutSequence == undefined) {
-                    break;
+            // Check if reached end
+            if (index >= numAvailableLengthsCounter.length) { return null; }
+
+            numAvailableLengthsCounter[index]++;
+            
+            if (numAvailableLengthsCounter[index] > maxNumAvailableLengths[index]) {
+                numAvailableLengthsCounter[index] = 0;
+                return increment(numAvailableLengthsCounter, maxNumAvailableLengths, ++index);
+            }
+        }
+
+        function decrement(numAvailableLengthsCounter, maxNumAvailableLengths, index = 0) {
+            // Check if reached end
+            if (index >= numAvailableLengthsCounter.length) { return null; }
+
+            numAvailableLengthsCounter[index]--;
+            
+            if (numAvailableLengthsCounter[index] < 0) {
+                numAvailableLengthsCounter[index] = 0;
+                return decrement(numAvailableLengthsCounter, maxNumAvailableLengths, ++index);
+            }
+
+            return index;
+        }
+
+        let incrementTrigger, decrementTrigger, tempNumAvailableLengthsCounter;
+        do {
+            // If all values are zero, skip
+            // If only one value is non-zero, skip since already check those cases previously
+            // If length of all uncut pieces is less than length of all cut pieces, skip since not enough material
+            if ((numAvailableLengthsCounter.filter((count) => count > 0).length > 1)
+                && (numAvailableLengthsCounter.reduce((accum, curr, index) => accum + curr * uncutPieces[index].length, 0) >= individualCutPieces.reduce((accum, curr) => accum + curr.cutWithKerf, 0))
+            ) {
+                tempNumAvailableLengthsCounter = [...numAvailableLengthsCounter];
+
+                availableCutPiecesByIndex = Array.from(
+                    {length: individualCutPieces.length},
+                    (value, index) => index
+                );
+    
+                // Clear current CutList from previous loop
+                currCutList.clear();
+
+                /**
+                 * TODO: If use all uncut pieces to create cut list, can skip adding any more with increment trigger.
+                 * ex.
+                 * [1,2,0] => 1x 144" + 2x 120"
+                 * incremenTrigger = 1 => 2 will be increased to 3
+                 * - No need to increment to [1,3,0] if [1,2,0] is success
+                 * instead, set incrementTrigger index to zero AND increment prev index instead
+                 * [1,2,0] => [2,0,0]
+                 * 
+                 * However, [1,2,0] may not be enough with required CutPieces.
+                 * Would then need to increment normally to [1,3,0] and try again.
+                 */
+                do {
+                    // Check that maxNum of uncutPieces[decrementTrigger].length can be used with the cutPieces required.
+                    // If not, keep incrementing until reach a value that is successful.
+
+                    decrementTrigger = decrement(tempNumAvailableLengthsCounter, maxNumAvailableLengths);
+                    if (decrementTrigger === null) { break; }
+
+                    cutSequenceArr = cutList.getCutList(uncutPieces[decrementTrigger].length, individualCutPieces, availableCutPiecesByIndex);
+
+                    if (cutSequenceArr == undefined) {
+                        break;
+                    }
+    
+                    // Create CutSequence instance from cutSequenceArr
+                    cutSequence = new CutSequence(uncutPieces[decrementTrigger]);
+                    cutSequence.cutPieces = cutSequenceArr.slice(0, -1);
+                    cutSequence.remainingLength = cutSequenceArr[cutSequenceArr.length - 1];
+                    
+                    // Add CutSequence to current CutList
+                    currCutList.push(cutSequence);
+                } while (availableCutPiecesByIndex.length);
+
+                // Check if current CutList has less price than the best CutList
+                if (
+                    (bestCutList == undefined) 
+                    || (bestCutList.getPrice() >= currCutList.getPrice())
+                ) {
+                    bestCutList = currCutList.deepCopy();
                 }
             }
-        });
+
+            incrementTrigger = increment(numAvailableLengthsCounter, maxNumAvailableLengths);
+        } while (incrementTrigger !== null);
+
+        console.log('Final Best');
+        console.log(bestCutList);
+        window.bestCutList = bestCutList;
     }
+
+    // ------------------------------------------------------------------------
 
     let possibleLengthsArr = [8*12, 10*12, 12*12];
     let cutPieces = [
@@ -194,30 +292,58 @@ document.body.appendChild(component());
         new CutPiece(2, 4, 39.875, possibleLengthsArr, 3),
         new CutPiece(2, 4, 49.875, possibleLengthsArr, 3),
     ];
-
-    console.log('Test 1');
+    /*
+    console.log('Test 1:');
     foo(cutPieces, possibleLengthsArr);
+    console.log('leastLeftover');
     getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr);
 
     possibleLengthsArr = [6*12, 8*12, 10*12, 12*12];
+    */
     cutPieces = [
         new CutPiece(4, 4, 36, possibleLengthsArr, 2),
         new CutPiece(4, 4, 35+5/16, possibleLengthsArr, 2),
         new CutPiece(4, 4, 30+21/32, possibleLengthsArr, 2),
         new CutPiece(4, 4, 22.5, possibleLengthsArr, 4),
     ];
+    
+    // ------------------------------------------------------------------------
 
-    console.log('Test 2');
-    foo(cutPieces, possibleLengthsArr);
-    getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr);
+    console.log('Test 2:');
+    // console.log('foo');
+    // foo(cutPieces, possibleLengthsArr);
+    // console.log('leastLeftover');
+    // getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr);
 
     const crossSection4x4 = new UncutCrossSection(4,4);
-    const uncutPieces = [
+    let uncutPieces = [
         new UncutPiece(crossSection4x4, 72, 1228),
         new UncutPiece(crossSection4x4, 96, 1548),
         new UncutPiece(crossSection4x4, 120, 2238),
         new UncutPiece(crossSection4x4, 144, 2748),
     ];
 
+    console.log('bar');
+    bar(cutPieces, uncutPieces);
+
+    // ------------------------------------------------------------------------
+    
+    console.log('Test 3:');
+
+    const crossSection2x4 = new UncutCrossSection(2,4);
+    uncutPieces = [
+        new UncutPiece(crossSection2x4, 48, 275),
+        new UncutPiece(crossSection2x4, 96, 298),
+        new UncutPiece(crossSection2x4, 120, 386),
+        new UncutPiece(crossSection2x4, 144, 462),
+    ];
+    cutPieces = [
+        new CutPiece(2, 4, 36, possibleLengthsArr, 4),
+        new CutPiece(2, 4, 32+1/8, possibleLengthsArr, 8),
+        new CutPiece(2, 4, 34, possibleLengthsArr, 2),
+    ];
+
+    console.log('bar');
+    
     bar(cutPieces, uncutPieces);
 })();
