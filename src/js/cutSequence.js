@@ -1,3 +1,6 @@
+import CutPiece from "./cutPiece.js";
+import UncutPiece from "./uncutPiece.js";
+
 class CutSequence {
     constructor(uncutPiece) {
         this.uncutPiece = uncutPiece;
@@ -11,14 +14,42 @@ class CutSequence {
     }
 
     /**
-     * Recursive function that returns list of CutPieces and minimal remaining length.
+     * Creates a CutSequence instance.
+     * @param {UncutPiece} uncutPiece 
+     * @param {[CutPiece]} individualCutPieces 
+     * @param {[Number]} availableCutPiecesByIndex
+     * @returns {CutSequence|null}
+     */
+    static createCutSequence(uncutPiece, individualCutPieces, availableCutPiecesByIndex) {
+        const cutSequenceArr = CutSequence.createCutSequenceArr(
+            uncutPiece.length, 
+            individualCutPieces, 
+            availableCutPiecesByIndex
+        );
+
+        // If cutSequenceArr returns just the uncutPiece length value (array length 1),
+        // every individualCutPiece is longer than the uncutPiece
+        if (cutSequenceArr.length == 1) {
+            return null;
+        }
+
+        // Create CutSequence instance from cutSequenceArr
+        const cutSequence = new CutSequence(uncutPiece);
+        cutSequence.cutPieces = cutSequenceArr.slice(0, -1);
+        cutSequence.remainingLength = cutSequenceArr[cutSequenceArr.length - 1];
+
+        return cutSequence;
+    }
+
+    /**
+     * Recursive function that returns array of CutPieces with smallest remaining length from an initial length.
      * @param {Number} remainingLength 
      * @param {[CutPiece]} individualCutPieces 
      * @param {[Number]} availableCutPiecesByIndex 
      * @param {Number} startIndex (default = 0) 
      * @returns {[...CutPiece, Number]} Array of CutPieces with leftover length of whole piece at the end
      */
-    static createCutSequence(remainingLength, individualCutPieces, availableCutPiecesByIndex, startIndex = 0) {
+    static createCutSequenceArr(remainingLength, individualCutPieces, availableCutPiecesByIndex, startIndex = 0) {
         // Return if availableCutPiecesByIndex is empty
         if (!availableCutPiecesByIndex.length) {
             return [ remainingLength ];
@@ -57,7 +88,7 @@ class CutSequence {
 
         return [
             selectedCutPiece, 
-            ...CutSequence.createCutSequence(
+            ...CutSequence.createCutSequenceArr(
                 remainingLength - selectedCutPiece.cutWithKerf, 
                 individualCutPieces,
                 availableCutPiecesByIndex,

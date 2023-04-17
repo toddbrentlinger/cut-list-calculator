@@ -1,4 +1,4 @@
-import { createElement } from "./utilities.js";
+import { createElement } from "../utilities.js";
 
 export default function Footer(copyrightYear) {
     const render = function() {

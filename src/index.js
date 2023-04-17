@@ -89,8 +89,7 @@ import CutSequence from './js/cutSequence';
         new UncutPiece(crossSection2x4, 144, 462),
     ];
 
-    // TODO: ISSUE - Causes infinite loop
-    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
 
@@ -129,5 +128,32 @@ import CutSequence from './js/cutSequence';
         new CutPiece(2, 4, 34, possibleLengthsArr, 2),
     ];
 
+    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+
+    // ------------------------------------------------------------------------
+    
+    console.log('Test: Wood Shed');
+
+    uncutPieces = [
+        new UncutPiece(crossSection2x4, 48, 275),
+        new UncutPiece(crossSection2x4, 96, 298),
+        new UncutPiece(crossSection2x4, 120, 386),
+        new UncutPiece(crossSection2x4, 144, 462),
+        new UncutPiece(crossSection2x4, 16*12, 616),
+    ];
+    cutPieces = [
+        new CutPiece(2, 4, 15*12+11, possibleLengthsArr, 4),
+        new CutPiece(2, 4, 15*12+4, possibleLengthsArr, 2),
+        new CutPiece(2, 4, 7*12, possibleLengthsArr, 32),
+        new CutPiece(2, 4, 8.5, possibleLengthsArr, 8),
+        new CutPiece(2, 4, 5*12+10, possibleLengthsArr, 4),
+        new CutPiece(2, 4, 2*12+9, possibleLengthsArr, 6),
+        new CutPiece(2, 4, 2*12+11.5, possibleLengthsArr, 2),
+    ];
+
+
+    //debugger;
+    // ISSUE: Very long time
+    debugger;
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 })();
