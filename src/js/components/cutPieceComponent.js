@@ -5,7 +5,8 @@ export default function CutPieceComponent(cutPiece) {
         return createElement(
             'tr', 
             {'class': 'cut-piece'},
-            createElement('td', {}, `${cutPiece.thickness}x${cutPiece.width}`),
+            createElement('td', {}, cutPiece.thickness),
+            createElement('td', {}, cutPiece.width),
             createElement('td', {}, cutPiece.cutLength),
             createElement('td', {}, cutPiece.quantity),
             createElement('td', {}, cutPiece.kerf),

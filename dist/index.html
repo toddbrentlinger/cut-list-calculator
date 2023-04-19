@@ -18,10 +18,14 @@
             <h2>Cut Pieces</h2>
             <ul id="cut-pieces-list"></ul>
             <form action="" method="get" name="cut-piece-create" id="cut-piece-create-form" class="piece-create-form">
-                <div class="form-inputs">
+                <!-- <div class="form-inputs">
                     <div class="input-container">
-                        <label for="cut-cross-section">Cross-Section:</label>
-                        <input type="text" name="cross-section" id="cut-cross-section" size="1">
+                        <label for="cut-thickness">Thickness:</label>
+                        <input type="text" name="thickness" id="cut-thickness" size="1">
+                    </div>
+                    <div class="input-container">
+                        <label for="cut-width">Width:</label>
+                        <input type="text" name="width" id="cut-width" size="1">
                     </div>
                     <div class="input-container">
                         <label for="cut-length">Length:</label>
@@ -35,7 +39,47 @@
                         <label for="cut-kerf">Kerf:</label>
                         <input type="text" name="kerf" id="cut-kerf" value="0.125" size="1">
                     </div>
-                </div>
+                </div> -->
+                <table class="form-inputs">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label for="cut-thickness">Thickness:</label>
+                            </th>
+                            <th>
+                                <label for="cut-width">Width:</label>
+                            </th>
+                            <th>
+                                <label for="cut-length">Length:</label>
+                            </th>
+                            <th>
+                                <label for="cut-quantity">Quantity:</label>
+                            </th>
+                            <th>
+                                <label for="cut-kerf">Kerf:</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" name="thickness" id="cut-thickness" size="1">
+                            </td>
+                            <td>
+                                <input type="text" name="width" id="cut-width" size="1">
+                            </td>
+                            <td>
+                                <input type="text" name="length" id="cut-length" size="1">
+                            </td>
+                            <td>
+                                <input type="number" name="quantity" id="cut-quantity" value="1">
+                            </td>
+                            <td>
+                                <input type="text" name="kerf" id="cut-kerf" value="0.125" size="1">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="submit-container">
                     <input type="submit" value="Add">
                 </div>
@@ -44,10 +88,14 @@
             <h2>Uncut Pieces</h2>
             <ul id="uncut-pieces-list"></ul>
             <form action="" method="get" name="uncut-piece-create" id="uncut-piece-create-form" class="piece-create-form">
-                <div class="form-inputs">
+                <!-- <div class="form-inputs">
                     <div class="input-container">
-                        <label for="uncut-cross-section">Cross-Section:</label>
-                        <input type="text" name="cross-section" id="uncut-cross-section" size="1">
+                        <label for="uncut-thickness">Thickness:</label>
+                        <input type="text" name="thickness" id="uncut-thickness" size="1">
+                    </div>
+                    <div class="input-container">
+                        <label for="uncut-width">Width:</label>
+                        <input type="text" name="width" id="uncut-width" size="1">
                     </div>
                     <div class="input-container">
                         <label for="uncut-length">Length:</label>
@@ -57,15 +105,49 @@
                         <label for="uncut-price">Price:</label>
                         <input type="text" name="price" id="uncut-price" size="1">
                     </div>
-                </div>
+                </div> -->
+                <table class="form-inputs">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label for="uncut-thickness">Thickness:</label>
+                            </th>
+                            <th>
+                                <label for="uncut-width">Width:</label>
+                            </th>
+                            <th>
+                                <label for="uncut-length">Length:</label>
+                            </th>
+                            <th>
+                                <label for="uncut-price">Price:</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" name="thickness" id="uncut-thickness" size="1">
+                            </td>
+                            <td>
+                                <input type="text" name="width" id="uncut-width" size="1">
+                            </td>
+                            <td>
+                                <input type="text" name="length" id="uncut-length" size="1">
+                            </td>
+                            <td>
+                                <input type="text" name="price" id="uncut-price" size="1">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="submit-container">
                     <input type="submit" value="Add">
                 </div>
             </form>
 
-            <button>Create Cut List</button>
+            <button id="create-cut-list-btn">Create Cut List</button>
 
-            <div id="best-cut-list"></div>
+            <div id="cut-list"></div>
         </main>
     </body>
 </html>

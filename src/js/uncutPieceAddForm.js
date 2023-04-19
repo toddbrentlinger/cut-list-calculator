@@ -1,21 +1,18 @@
-const cutPieceAddForm = (() => {
+const uncutPieceAddForm = (() => {
     let formElement;
 
-    function init(handleCutPieceAddFormSubmit) {
-        formElement = document.getElementById('cut-piece-create-form');
+    function init(handleUncutPieceAddFormSubmit) {
+        formElement = document.getElementById('uncut-piece-create-form');
 
         if (!formElement) {
             // TODO: Deal with formElement not being found. Create it dynamically.
         }
 
         formElement.addEventListener('submit', (e) => {
-            handleCutPieceAddFormSubmit(e);
+            handleUncutPieceAddFormSubmit(e);
 
             updateForm();
         });
-
-        //cutPiecesListElement = document.createElement('ul');
-        //formElement.before(cutPiecesListElement);
     }
 
     function updateForm() {
@@ -23,7 +20,7 @@ const cutPieceAddForm = (() => {
 
         // Reset input fields for cut length and quantity, leaving other inputs with user entered data.
         // Focus cursor on last input which should be cut length field
-        ['quantity', 'length'].forEach((inputName, index, arr) => {
+        ['price', 'length'].forEach((inputName, index, arr) => {
             inputElement = formElement.elements.namedItem(inputName);
             if (inputElement) {
                 inputElement.value = inputElement.defaultValue;
@@ -53,4 +50,4 @@ const cutPieceAddForm = (() => {
     };
 })();
 
-export default cutPieceAddForm;
+export default uncutPieceAddForm;

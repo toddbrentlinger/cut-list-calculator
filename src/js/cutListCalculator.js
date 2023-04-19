@@ -1,63 +1,8 @@
 import { CutList } from "./cutList.js";
-import CutPiece from "./cutPiece.js";
-import cutPieceAddForm from "./cutPieceAddForm.js";
 import CutSequence from "./cutSequence.js";
-import Footer from "./components/footer.js";
-import { createElement } from "./utilities.js";
-import CutPieceComponent from "./components/cutPieceComponent.js";
 
 const cutListCalculator = (() => {
-    const crossSections = [];
-
-    const cutPieces = [];
-    let cutPiecesTableBody;
-
-    const uncutPieces = [];
-
     let bestCutList;
-
-    function init() {
-        document.body.appendChild(Footer(2023).render());
-
-        cutPieceAddForm.init(handleCutPieceAddFormSubmit);
-
-        const table = document.createElement('table');
-        table.appendChild(
-            createElement('thead', {}, 
-                createElement('tr', {}, 
-                    createElement('th', {}, 'Cross-Section'),
-                    createElement('th', {}, 'Length'),
-                    createElement('th', {}, 'Quantity'),
-                    createElement('th', {}, 'Kerf')
-                )
-            )
-        );
-        cutPiecesTableBody = table.appendChild(
-            document.createElement('tbody')
-        );
-        cutPieceAddForm.formElement.before(table);
-    }
-
-    function handleCutPieceAddFormSubmit(e) {
-        e.preventDefault();
-
-        // Create CutPiece from form inputs
-        const cutPiece = new CutPiece(
-            2, 4, // cross section
-            Number(e.target.elements.namedItem('length').value), 
-            [], 
-            Number(e.target.elements.namedItem('quantity').value),
-            Number(e.target.elements.namedItem('kerf').value)
-        );
-
-        // Add CutPiece to list through cutPiecesRef
-        cutPieces.push(cutPiece);
-
-        // Display new CutPiece
-        cutPiecesTableBody.append(
-            CutPieceComponent(cutPiece).render()
-        );
-    }
 
     /**
      * 
@@ -299,15 +244,16 @@ const cutListCalculator = (() => {
         });
 
         let incrementTrigger, decrementTrigger, tempNumAvailableLengthsCounter, skipFlag;
-        let tenPercentFactorCounter = 1;
+        let percentFactorCounter = 1;
+        let percentMultipleDisplay = 5;
         do {
             //debugger;
             //console.log(numAvailableLengthsCounter);
             let percentage = getPercentage(numAvailableLengthsCounter, maxNumAvailableLengths);
             
-            if (percentage && percentage > (10 * tenPercentFactorCounter)) {
+            if (percentage && percentage > (percentMultipleDisplay * percentFactorCounter)) {
                 console.log(`${percentage.toFixed(0)}%`);
-                tenPercentFactorCounter++;
+                percentFactorCounter++;
             }
 
             skipFlag = false;
@@ -376,12 +322,11 @@ const cutListCalculator = (() => {
         window.bestCutList = bestCutList;
 
         bestCutList.displayMaterialList();
-        
+
         return bestCutList;
     }
 
     return {
-        init,
         getCheapestCutList,
     };
 })();
