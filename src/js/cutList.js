@@ -34,8 +34,9 @@ export class CutList {
                 materialListObj[cutSequence.uncutPiece.length] = 1;
             }
         });
-        
+
         console.log(materialListObj);
+        return materialListObj;
     }
 }
 

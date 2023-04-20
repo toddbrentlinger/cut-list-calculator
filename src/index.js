@@ -2,12 +2,13 @@ import './styles/meyer_reset.scss';
 import './styles/styles.scss';
 import cutListCalculator from './js/cutListCalculator.js';
 import CutPiece from './js/cutPiece.js';
-import {UncutPiece, UncutCrossSection} from './js/uncutPiece.js';
-import {cutList, CutList} from './js/cutList.js';
-import CutSequence from './js/cutSequence';
+import {CrossSection, UncutPiece} from './js/uncutPiece.js';
+import {cutList} from './js/cutList.js';
+import cutListCalculatorComponent from './js/components/cutListCalculatorComponent.js';
 
 (() => {
-    cutListCalculator.init();
+    //cutListCalculator.init();
+    cutListCalculatorComponent.init();
 
     function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {
         // Sort cutPieces by cutLength in decreasing order
@@ -74,14 +75,13 @@ import CutSequence from './js/cutSequence';
 
     console.log('Test: Example');
 
-    let possibleLengthsArr = [8*12, 10*12, 12*12];
     let cutPieces = [
-        new CutPiece(2, 4, 19.875, possibleLengthsArr, 3),
-        new CutPiece(2, 4, 39.875, possibleLengthsArr, 3),
-        new CutPiece(2, 4, 49.875, possibleLengthsArr, 3),
+        new CutPiece(2, 4, 19.875, 3),
+        new CutPiece(2, 4, 39.875, 3),
+        new CutPiece(2, 4, 49.875, 3),
     ];
 
-    const crossSection2x4 = new UncutCrossSection(2,4);
+    const crossSection2x4 = new CrossSection(2,4);
     let uncutPieces = [
         new UncutPiece(crossSection2x4, 48, 275),
         new UncutPiece(crossSection2x4, 96, 298),
@@ -96,13 +96,13 @@ import CutSequence from './js/cutSequence';
     console.log('Test: See-Saw');
     
     cutPieces = [
-        new CutPiece(4, 4, 36, possibleLengthsArr, 2),
-        new CutPiece(4, 4, 35+5/16, possibleLengthsArr, 2),
-        new CutPiece(4, 4, 30+21/32, possibleLengthsArr, 2),
-        new CutPiece(4, 4, 22.5, possibleLengthsArr, 4),
+        new CutPiece(4, 4, 36, 2),
+        new CutPiece(4, 4, 35+5/16, 2),
+        new CutPiece(4, 4, 30+21/32, 2),
+        new CutPiece(4, 4, 22.5, 4),
     ];
 
-    const crossSection4x4 = new UncutCrossSection(4,4);
+    const crossSection4x4 = new CrossSection(4,4);
     uncutPieces = [
         new UncutPiece(crossSection4x4, 72, 1228),
         new UncutPiece(crossSection4x4, 96, 1548),
@@ -123,9 +123,9 @@ import CutSequence from './js/cutSequence';
         new UncutPiece(crossSection2x4, 144, 462),
     ];
     cutPieces = [
-        new CutPiece(2, 4, 36, possibleLengthsArr, 4),
-        new CutPiece(2, 4, 32+1/8, possibleLengthsArr, 8),
-        new CutPiece(2, 4, 34, possibleLengthsArr, 2),
+        new CutPiece(2, 4, 36, 4),
+        new CutPiece(2, 4, 32+1/8, 8),
+        new CutPiece(2, 4, 34, 2),
     ];
 
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
@@ -142,18 +142,18 @@ import CutSequence from './js/cutSequence';
         new UncutPiece(crossSection2x4, 16*12, 616),
     ];
     cutPieces = [
-        new CutPiece(2, 4, 15*12+11, possibleLengthsArr, 4),
-        new CutPiece(2, 4, 15*12+4, possibleLengthsArr, 2),
-        new CutPiece(2, 4, 7*12, possibleLengthsArr, 32),
-        new CutPiece(2, 4, 8.5, possibleLengthsArr, 8),
-        new CutPiece(2, 4, 5*12+10, possibleLengthsArr, 4),
-        new CutPiece(2, 4, 2*12+9, possibleLengthsArr, 6),
-        new CutPiece(2, 4, 2*12+11.5, possibleLengthsArr, 2),
+        new CutPiece(2, 4, 15*12+11, 4),
+        new CutPiece(2, 4, 15*12+4, 2),
+        new CutPiece(2, 4, 7*12, 32),
+        new CutPiece(2, 4, 8.5, 8),
+        new CutPiece(2, 4, 5*12+10, 4),
+        new CutPiece(2, 4, 2*12+9, 6),
+        new CutPiece(2, 4, 2*12+11.5, 2),
     ];
 
-
-    //debugger;
     // ISSUE: Very long time
-    debugger;
-    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    //debugger;
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+
+    window.cutListCalculator = cutListCalculator;
 })();
