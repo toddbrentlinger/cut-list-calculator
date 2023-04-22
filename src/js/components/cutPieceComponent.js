@@ -3,13 +3,13 @@ import { createElement } from "../utilities.js";
 export default function CutPieceComponent(cutPiece) {
     const render = function() {
         return createElement(
-            'tr', 
+            'div', 
             {'class': 'cut-piece'},
-            createElement('td', {}, cutPiece.thickness),
-            createElement('td', {}, cutPiece.width),
-            createElement('td', {}, cutPiece.cutLength),
-            createElement('td', {}, cutPiece.quantity),
-            createElement('td', {}, cutPiece.kerf),
+            createElement('div', {}, cutPiece.thickness),
+            createElement('div', {}, cutPiece.width),
+            createElement('div', {}, cutPiece.cutLength),
+            createElement('div', {}, cutPiece.quantity),
+            createElement('div', {}, cutPiece.kerf),
         );
     }
 

@@ -3,7 +3,9 @@ import cutPieceAddForm from "../cutPieceAddForm.js";
 import uncutPieceAddForm from "../uncutPieceAddForm.js";
 
 import CutPieceComponent from "./cutPieceComponent.js";
+import CutPieceListComponent from "./cutPieceListComponent.js";
 import UncutPieceComponent from "./uncutPieceComponent.js";
+import UncutPieceListComponent from "./uncutPieceListComponent.js";
 import CutListComponent from "./cutListComponent.js";
 
 import cutListCalculator from "../cutListCalculator.js";
@@ -15,24 +17,33 @@ import { createElement } from "../utilities.js";
 const cutListCalculatorComponent = (() => {
     let cutPieces = [];
     let uncutPieces = [];
+
     let bestCutList;
 
     let cutListElement;
+
+    let cutPieceListComponent;
+    let uncutPieceListComponent;
+
     let cutPiecesTableBody;
     let uncutPiecesTableBody;
 
     function init() {
-        document.body.appendChild(Footer(2023).render());
-
-        const createCutListBtn = document.getElementById('create-cut-list-btn');
-        if (createCutListBtn) {
-            createCutListBtn.addEventListener('click', handleCreateCutListClick);
+        let mainElement = document.querySelector('main');
+        if (mainElement === null) {
+            mainElement = document.createElement('main');
+            document.body.appendChild(mainElement);
         }
 
-        cutListElement = document.getElementById('cut-list');
-
+        // Add forms that add cut/uncut pieces
         cutPieceAddForm.init(handleCutPieceAddFormSubmit);
         uncutPieceAddForm.init(handleUncutPieceAddFormSubmit);
+
+        // Add cut/uncut pieces list
+        cutPieceListComponent = CutPieceListComponent();
+        uncutPieceListComponent = UncutPieceListComponent();
+        mainElement.appendChild(cutPieceListComponent.render());
+        mainElement.appendChild(uncutPieceListComponent.render());
 
         const cutPieceTable = document.createElement('table');
         cutPieceTable.appendChild(
@@ -68,6 +79,18 @@ const cutListCalculatorComponent = (() => {
 
         cutPieceAddForm.formElement.before(cutPieceTable);
         uncutPieceAddForm.formElement.before(uncutPieceTable);
+
+        // Handle button that creates cut list
+        const createCutListBtn = document.getElementById('create-cut-list-btn');
+        if (createCutListBtn) {
+            createCutListBtn.addEventListener('click', handleCreateCutListClick);
+        }
+
+        // Add calculated cut list
+        cutListElement = document.getElementById('cut-list');
+
+        // Add footer component, passing in the first year of the app
+        document.body.appendChild(Footer(2023).render());
     }
 
     function addCutPiece(cutPiece) {
@@ -99,6 +122,8 @@ const cutListCalculatorComponent = (() => {
         cutPiecesTableBody.append(
             CutPieceComponent(cutPiece).render()
         );
+
+        cutPieceListComponent.addCutPieceComponent(CutPieceComponent(cutPiece));
     }
 
     function handleUncutPieceAddFormSubmit(e) {
@@ -118,6 +143,8 @@ const cutListCalculatorComponent = (() => {
         uncutPiecesTableBody.append(
             UncutPieceComponent(uncutPiece).render()
         );
+
+        uncutPieceListComponent.addUncutPieceComponent(UncutPieceComponent(uncutPiece));
     }
     
     function handleCreateCutListClick(e) {
