@@ -1,6 +1,7 @@
 import Footer from "./footer.js";
-import cutPieceAddForm from "../cutPieceAddForm.js";
-import uncutPieceAddForm from "../uncutPieceAddForm.js";
+
+import CutPieceCreateFormComponent from "./cutPieceCreateFormComponent.js";
+import UncutPieceCreateFormComponent from "./uncutPieceCreateFormComponent.js";
 
 import CutPieceComponent from "./cutPieceComponent.js";
 import CutPieceListComponent from "./cutPieceListComponent.js";
@@ -25,69 +26,45 @@ const cutListCalculatorComponent = (() => {
     let cutPieceListComponent;
     let uncutPieceListComponent;
 
-    let cutPiecesTableBody;
-    let uncutPiecesTableBody;
+    function init(cutPieces = [], uncutPieces = [], bestCutList = undefined) {
+        cutPieces = cutPieces;
+        uncutPieces = uncutPieces;
+        bestCutList = bestCutList;
 
-    function init() {
         let mainElement = document.querySelector('main');
         if (mainElement === null) {
             mainElement = document.createElement('main');
             document.body.appendChild(mainElement);
         }
 
-        // Add forms that add cut/uncut pieces
-        cutPieceAddForm.init(handleCutPieceAddFormSubmit);
-        uncutPieceAddForm.init(handleUncutPieceAddFormSubmit);
-
-        // Add cut/uncut pieces list
+        // Add cut/uncut pieces list with create form after
+        mainElement.appendChild(createElement('h2', {}, 'Cut Pieces'));
         cutPieceListComponent = CutPieceListComponent();
-        uncutPieceListComponent = UncutPieceListComponent();
         mainElement.appendChild(cutPieceListComponent.render());
+        mainElement.appendChild(
+            CutPieceCreateFormComponent(handleCutPieceAddFormSubmit).render()
+        );
+
+        mainElement.appendChild(createElement('h2', {}, 'Uncut Pieces'));
+        uncutPieceListComponent = UncutPieceListComponent();
         mainElement.appendChild(uncutPieceListComponent.render());
-
-        const cutPieceTable = document.createElement('table');
-        cutPieceTable.appendChild(
-            createElement('thead', {}, 
-                createElement('tr', {},
-                    createElement('th', {}, 'Thickness'),
-                    createElement('th', {}, 'Width'),
-                    createElement('th', {}, 'Length'),
-                    createElement('th', {}, 'Quantity'),
-                    createElement('th', {}, 'Kerf')
-                )
-            )
+        mainElement.appendChild(
+            UncutPieceCreateFormComponent(handleUncutPieceAddFormSubmit).render()
         );
 
-        const uncutPieceTable = document.createElement('table');
-        uncutPieceTable.appendChild(
-            createElement('thead', {}, 
-                createElement('tr', {},
-                    createElement('th', {}, 'Thickness'),
-                    createElement('th', {}, 'Width'),
-                    createElement('th', {}, 'Length'),
-                    createElement('th', {}, 'Price'),
-                )
-            )
+        // Add button that creates cut list with click event listener
+        const createCutListBtnContainer = mainElement.appendChild(
+            createElement('div', {'id': 'create-cut-list-btn-container'})
         );
-
-        cutPiecesTableBody = cutPieceTable.appendChild(
-            document.createElement('tbody')
+        const createCutListBtn = createCutListBtnContainer.appendChild(
+            createElement('button', {'id': 'create-cut-list-btn'}, 'Create Cut List')
         );
-        uncutPiecesTableBody = uncutPieceTable.appendChild(
-            document.createElement('tbody')
-        );
-
-        cutPieceAddForm.formElement.before(cutPieceTable);
-        uncutPieceAddForm.formElement.before(uncutPieceTable);
-
-        // Handle button that creates cut list
-        const createCutListBtn = document.getElementById('create-cut-list-btn');
-        if (createCutListBtn) {
-            createCutListBtn.addEventListener('click', handleCreateCutListClick);
-        }
+        createCutListBtn.addEventListener('click', handleCreateCutListClick);
 
         // Add calculated cut list
-        cutListElement = document.getElementById('cut-list');
+        cutListElement = mainElement.appendChild(
+            createElement('div', {'id': 'cut-list'})
+        );
 
         // Add footer component, passing in the first year of the app
         document.body.appendChild(Footer(2023).render());
@@ -119,10 +96,6 @@ const cutListCalculatorComponent = (() => {
         addCutPiece(cutPiece);
 
         // Display new CutPiece
-        cutPiecesTableBody.append(
-            CutPieceComponent(cutPiece).render()
-        );
-
         cutPieceListComponent.addCutPieceComponent(CutPieceComponent(cutPiece));
     }
 
@@ -140,10 +113,6 @@ const cutListCalculatorComponent = (() => {
         addUncutPiece(uncutPiece);
 
         // Display new UncutPiece
-        uncutPiecesTableBody.append(
-            UncutPieceComponent(uncutPiece).render()
-        );
-
         uncutPieceListComponent.addUncutPieceComponent(UncutPieceComponent(uncutPiece));
     }
     

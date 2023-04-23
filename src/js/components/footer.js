@@ -2,7 +2,7 @@ import { createElement } from "../utilities.js";
 
 export default function Footer(copyrightYear) {
     const render = function() {
-        const footer = createElement('footer', {'class': 'white-text-shadow'});
+        const footer = document.createElement('footer');
         const currYear = new Date().getFullYear();
 
         // Paragraph element as child of footer
