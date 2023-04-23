@@ -321,8 +321,6 @@ const cutListCalculator = (() => {
         console.log(bestCutList);
         window.bestCutList = bestCutList;
 
-        bestCutList.displayMaterialList();
-
         return bestCutList;
     }
 

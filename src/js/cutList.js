@@ -23,19 +23,20 @@ export class CutList {
         return cutList;
     }
 
-    /** Display to console an object with keys as uncut lengths and values as corresponding quantity. */
-    displayMaterialList() {
+    getMaterialList() {
         const materialListObj = {};
 
         this.cutSequences.forEach((cutSequence) => {
             if (cutSequence.uncutPiece.length in materialListObj) {
-                materialListObj[cutSequence.uncutPiece.length]++;
+                materialListObj[cutSequence.uncutPiece.length].quantity++;
             } else {
-                materialListObj[cutSequence.uncutPiece.length] = 1;
+                materialListObj[cutSequence.uncutPiece.length] = {
+                    unitPrice: cutSequence.uncutPiece.price,
+                    quantity: 1,
+                };
             }
         });
 
-        console.log(materialListObj);
         return materialListObj;
     }
 }
