@@ -15,29 +15,52 @@ export default function CutListComponent(cutList) {
         // Material List - Table Head
         materialListTable.appendChild(createElement('thead', {}, 
             createElement('tr', {}, 
-                createElement('th', {}, 'Quantity'),
-                createElement('th', {}, 'Uncut Length'),
-                createElement('th', {}, 'Unit Price'),
-                createElement('th', {}, 'Sum Price')
+                createElement('th', {'scope': 'col'}, 'Quantity'),
+                createElement('th', {'scope': 'col'}, 'Uncut Length'),
+                createElement('th', {'scope': 'col'}, 'Unit Price'),
+                createElement('th', {'scope': 'col'}, 'Sum Price')
             )
         ));
 
         // Material List - Table Body
         const materialListTableBody = materialListTable.appendChild(document.createElement('tbody'));
+        let totalPrice = 0;
         for (const [uncutLength, uncutObj] of Object.entries(materialList)) {
-            materialListTable.appendChild(createElement('tr', {}, 
+            materialListTableBody.appendChild(createElement('tr', {}, 
                 createElement('td', {}, uncutObj.quantity),
                 createElement('td', {}, uncutLength),
                 createElement('td', {}, uncutObj.unitPrice),
                 createElement('td', {}, uncutObj.quantity * uncutObj.unitPrice)
             ));
+            totalPrice += uncutObj.quantity * uncutObj.unitPrice;
         }
+
+        // Material List - Table Body - Total Price
+        materialListTable.appendChild(createElement('tr', {}, 
+            createElement('td', {'colspan': '2'}),
+            createElement('th', {'scope': 'row'}, 'Total Price'),
+            createElement('td', {}, totalPrice.toFixed(2))
+        ));
 
         // Cut Sequences
         element.appendChild(createElement('h3', {}, 'Cut Sequences:'));
 
-        cutList.cutSequences.forEach((cutSequence, index) => {
-            element.appendChild(CutSequenceComponent(cutSequence).render());
+        // Cut Sequences - Table
+        const cutSequencesTable = element.appendChild(document.createElement('table'));
+
+        // Cut Sequences - Table Head
+        cutSequencesTable.appendChild(createElement('thead', {}, 
+            createElement('tr', {}, 
+                createElement('th', {'scope': 'col'}, 'Uncut Member'),
+                createElement('th', {'scope': 'col'}, 'Cut Length'),
+                createElement('th', {'scope': 'col'}, 'Remaining Length')
+            )
+        ));
+
+        // Material List - Table Body
+        const cutSequencesTableBody = cutSequencesTable.appendChild(document.createElement('tbody'));
+        cutList.cutSequences.forEach((cutSequence) => {
+            cutSequencesTableBody.append(...CutSequenceComponent(cutSequence).render());
         });
         
         return element;

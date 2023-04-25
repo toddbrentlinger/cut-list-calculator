@@ -65,18 +65,32 @@ footer {
     justify-content: center;
 }
 
+#cut-piece-create-form {
+
+}
+
+#uncut-piece-create-form {
+    
+}
+
 // Custom Classes
 
 .cut-sequence {
     display: grid;
     grid-auto-flow: column;
+    border: 2px solid var(--base-black, black);
+    border-top: none;
+
+    &:first-child {
+        border-top: 2px solid var(--base-black, black);
+    }
 }
 
 .input-container {
     display: inline-block;
 
     label, input {
-        display: block;
+        width: 100%;
     }
 }
 
@@ -106,8 +120,8 @@ footer {
     .piece-list-body > .cut-piece,
     .piece-list-body > .uncut-piece {
         display: grid;
-        grid-auto-flow: column;
-        justify-content: space-between;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: 1rem;
     }
 
     .piece-list-head {
@@ -121,7 +135,7 @@ footer {
 
 // Misc
 
-h1, h2 {
+h1, h2, h3 {
     text-align: center;
 }
 
@@ -131,4 +145,19 @@ table {
     border-collapse: collapse;
     border: 2px solid var(--base-black, black);
     text-align: center;
+
+    tbody {
+        tr:nth-child(odd) {
+            background-color: hsl(0, 0%, 85%);
+        }
+
+        tr:nth-child(even) {
+            background-color: hsl(0, 0%, 75%);
+        }
+    }
+
+    th, td {
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--base-black, black);
+    }
 }

@@ -45,7 +45,7 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'cut-quantity'}, 'Quantity:'),
-                createElement('input', {'type': 'number', 'name': 'quantity', 'id': 'cut-quantity', 'value': '1'})
+                createElement('input', {'type': 'number', 'name': 'quantity', 'id': 'cut-quantity', 'value': '1', 'min': '1'})
             )
         );
 
