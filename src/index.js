@@ -7,9 +7,6 @@ import {cutList} from './js/cutList.js';
 import cutListCalculatorComponent from './js/components/cutListCalculatorComponent.js';
 
 (() => {
-    //cutListCalculator.init();
-    cutListCalculatorComponent.init();
-
     function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {
         // Sort cutPieces by cutLength in decreasing order
         cutPieces.sort((a,b) => b.cutLength - a.cutLength);
@@ -111,6 +108,8 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
     ];
     
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+
+    cutListCalculatorComponent.init(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
     

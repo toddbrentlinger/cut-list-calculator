@@ -37,20 +37,29 @@ const cutListCalculatorComponent = (() => {
             document.body.appendChild(mainElement);
         }
 
+        // Description
+        mainElement.appendChild(createElement('p', {}, 
+            'Dimensional lumber comes in pre-determined lengths with their own individual prices (Uncut Pieces). Given the cut lengths of dimensional lumber required for your project (Cut Pieces) and the available pre-determined lengths, this app calculates the cheapest amount of pre-determined length dimensional lumber needed and provides the cut sequence for each uncut piece.'
+        ));
+
         // Add cut/uncut pieces list with create form after
-        mainElement.appendChild(createElement('h2', {}, 'Cut Pieces'));
+        mainElement.appendChild(createElement('h2', {}, 'Cut Pieces:'));
         cutPieceListComponent = CutPieceListComponent();
         mainElement.appendChild(cutPieceListComponent.render());
         mainElement.appendChild(
             CutPieceCreateFormComponent(handleCutPieceAddFormSubmit).render()
         );
 
-        mainElement.appendChild(createElement('h2', {}, 'Uncut Pieces'));
+        mainElement.appendChild(createElement('h2', {}, 'Uncut Pieces:'));
         uncutPieceListComponent = UncutPieceListComponent();
         mainElement.appendChild(uncutPieceListComponent.render());
         mainElement.appendChild(
             UncutPieceCreateFormComponent(handleUncutPieceAddFormSubmit).render()
         );
+
+        // Add any cut/uncut pieces passed as parameters
+        cutPieces.forEach((cutPiece) => addCutPiece(cutPiece));
+        uncutPieces.forEach((uncutPiece) => addUncutPiece(uncutPiece));
 
         // Add button that creates cut list with click event listener
         const createCutListBtnContainer = mainElement.appendChild(
@@ -71,12 +80,22 @@ const cutListCalculatorComponent = (() => {
     }
 
     function addCutPiece(cutPiece) {
+        // Add CutPiece to array
         cutPieces.push(cutPiece);
+
+        // Display new CutPiece in list
+        cutPieceListComponent.addCutPieceComponent(CutPieceComponent(cutPiece));
+
         return cutPiece;
     }
 
     function addUncutPiece(uncutPiece) {
+        // Add UncutPiece to array
         uncutPieces.push(uncutPiece);
+        
+        // Display new UncutPiece
+        uncutPieceListComponent.addUncutPieceComponent(UncutPieceComponent(uncutPiece));
+
         return uncutPiece;
     }
 
@@ -91,12 +110,8 @@ const cutListCalculatorComponent = (() => {
             Number(e.target.elements.namedItem('quantity').value),
             Number(e.target.elements.namedItem('kerf').value)
         );
-
-        // Add CutPiece to list through cutPiecesRef
+        
         addCutPiece(cutPiece);
-
-        // Display new CutPiece
-        cutPieceListComponent.addCutPieceComponent(CutPieceComponent(cutPiece));
     }
 
     function handleUncutPieceAddFormSubmit(e) {
@@ -108,12 +123,8 @@ const cutListCalculatorComponent = (() => {
             Number(e.target.elements.namedItem('length').value),
             Number(e.target.elements.namedItem('price').value),
         );
-
-        // Add UncutPiece to list through uncutPieces
+        
         addUncutPiece(uncutPiece);
-
-        // Display new UncutPiece
-        uncutPieceListComponent.addUncutPieceComponent(UncutPieceComponent(uncutPiece));
     }
     
     function handleCreateCutListClick(e) {
