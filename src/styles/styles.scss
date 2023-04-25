@@ -60,7 +60,8 @@ footer {
 
 // Custom IDs
 
-#create-cut-list-btn-container {
+#create-cut-list-btn-container,
+.clear-btn-container {
     display: grid;
     justify-content: center;
 }

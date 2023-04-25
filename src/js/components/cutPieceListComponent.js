@@ -13,6 +13,16 @@ export default function CutPieceListComponent() {
         }
     };
 
+    const clear = function() {
+        // Remove cut piece components from array
+        cutPieceComponents = [];
+
+        // Remove elements from document
+        while (cutPieceListElement.firstChild) {
+            cutPieceListElement.removeChild(cutPieceListElement.firstChild);
+        }
+    };
+
     const render = function() {
         if (element === undefined) {
             element = createElement('div', {'class': 'piece-list'});
@@ -32,16 +42,12 @@ export default function CutPieceListComponent() {
         // Add list body (table body)
         cutPieceListElement = element.appendChild(createElement('div', {'class': 'piece-list-body'}));
 
-        // Add cut piece components for list
-        // for (const cutPieceComponent of cutPieceComponents) {
-        //     cutPieceListElement.appendChild(cutPieceComponent.render());
-        // }
-
         return element;
     }
 
     return {
         addCutPieceComponent,
+        clear,
         render,
     };
 }

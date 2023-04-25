@@ -13,6 +13,16 @@ export default function UncutPieceListComponent() {
         }
     };
 
+    const clear = function() {
+        // Remove uncut piece components from array
+        uncutPieceComponents = [];
+
+        // Remove elements from document
+        while (uncutPieceListElement.firstChild) {
+            uncutPieceListElement.removeChild(uncutPieceListElement.firstChild);
+        }
+    };
+
     const render = function() {
         if (element === undefined) {
             element = createElement('div', {'class': 'piece-list'});
@@ -36,6 +46,7 @@ export default function UncutPieceListComponent() {
 
     return {
         addUncutPieceComponent,
+        clear,
         render,
     };
 }

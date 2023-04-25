@@ -2,10 +2,25 @@ import { createElement } from "../utilities.js";
 import CutSequenceComponent from "./cutSequenceComponent.js";
 
 export default function CutListComponent(cutList) {
-    const render = function() {
-        const materialList = cutList.getMaterialList();
-        const element = createElement('div', {'class': 'cut-list'});
+    let element;
 
+    const clear = function() {
+        if (element === undefined) { return; }
+        
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    }
+
+    const render = function() {
+        if (element === undefined) {
+            element = createElement('div', {'id': 'cut-list'});
+        }
+
+        if (cutList === undefined) {
+            return element;
+        }
+        
         // Material List - Header
         element.appendChild(createElement('h3', {}, 'Material List:'));
         
@@ -23,6 +38,7 @@ export default function CutListComponent(cutList) {
         ));
 
         // Material List - Table Body
+        const materialList = cutList.getMaterialList();
         const materialListTableBody = materialListTable.appendChild(document.createElement('tbody'));
         let totalPrice = 0;
         for (const [uncutLength, uncutObj] of Object.entries(materialList)) {
@@ -68,5 +84,11 @@ export default function CutListComponent(cutList) {
 
     return {
         render,
+        get cutList() { return cutList; },
+        set cutList(newCutList) { 
+            cutList = newCutList;
+            clear();
+            render();
+        },
     };
 }

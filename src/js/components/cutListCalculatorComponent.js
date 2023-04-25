@@ -25,6 +25,7 @@ const cutListCalculatorComponent = (() => {
 
     let cutPieceListComponent;
     let uncutPieceListComponent;
+    let cutListComponent;
 
     function init(cutPieces = [], uncutPieces = [], bestCutList = undefined) {
         cutPieces = cutPieces;
@@ -39,20 +40,39 @@ const cutListCalculatorComponent = (() => {
 
         // Description
         mainElement.appendChild(createElement('p', {}, 
-            'Dimensional lumber comes in pre-determined lengths with their own individual prices (Uncut Pieces). Given the cut lengths of dimensional lumber required for your project (Cut Pieces) and the available pre-determined lengths, this app calculates the cheapest amount of pre-determined length dimensional lumber needed and provides the cut sequence for each uncut piece.'
+            'Dimensional lumber comes in pre-determined lengths with their own individual prices (Uncut Pieces). Given the cut lengths of dimensional lumber required for your project (Cut Pieces) and the available pre-determined lengths, this app calculates the cheapest amount of lumber needed and provides the cut sequence for each uncut piece.'
         ));
 
         // Add cut/uncut pieces list with create form after
+
+        // Cut Pieces - Header
         mainElement.appendChild(createElement('h2', {}, 'Cut Pieces:'));
+        // Cut Pieces - Clear Button
+        mainElement.appendChild(
+            createElement('div', {'class': 'clear-btn-container'})
+        ).appendChild(
+            createElement('button', {'class': 'clear-btn'}, 'Clear')
+        ).addEventListener('click', handleCutPieceListClear);
+        // Cut Pieces - List
         cutPieceListComponent = CutPieceListComponent();
         mainElement.appendChild(cutPieceListComponent.render());
+        // Cut Pieces - Create Form
         mainElement.appendChild(
             CutPieceCreateFormComponent(handleCutPieceAddFormSubmit).render()
         );
 
+        // Uncut Pieces - Header
         mainElement.appendChild(createElement('h2', {}, 'Uncut Pieces:'));
+        // Uncut Pieces - Clear Button
+        mainElement.appendChild(
+            createElement('div', {'class': 'clear-btn-container'})
+        ).appendChild(
+            createElement('button', {'class': 'clear-btn'}, 'Clear')
+        ).addEventListener('click', handleUncutPieceListClear);
+        // Uncut Pieces - List
         uncutPieceListComponent = UncutPieceListComponent();
         mainElement.appendChild(uncutPieceListComponent.render());
+        // Uncut Pieces - Create Form
         mainElement.appendChild(
             UncutPieceCreateFormComponent(handleUncutPieceAddFormSubmit).render()
         );
@@ -62,18 +82,16 @@ const cutListCalculatorComponent = (() => {
         uncutPieces.forEach((uncutPiece) => addUncutPiece(uncutPiece));
 
         // Add button that creates cut list with click event listener
-        const createCutListBtnContainer = mainElement.appendChild(
+        const createCutListBtn = mainElement.appendChild(
             createElement('div', {'id': 'create-cut-list-btn-container'})
-        );
-        const createCutListBtn = createCutListBtnContainer.appendChild(
+        ).appendChild(
             createElement('button', {'id': 'create-cut-list-btn'}, 'Create Cut List')
         );
         createCutListBtn.addEventListener('click', handleCreateCutListClick);
 
         // Add calculated cut list
-        cutListElement = mainElement.appendChild(
-            createElement('div', {'id': 'cut-list'})
-        );
+        cutListComponent = CutListComponent();
+        mainElement.appendChild(cutListComponent.render());
 
         // Add footer component, passing in the first year of the app
         document.body.appendChild(Footer(2023).render());
@@ -135,7 +153,27 @@ const cutListCalculatorComponent = (() => {
             uncutPieces
         );
 
-        cutListElement.append(CutListComponent(bestCutList).render());
+        cutListComponent.cutList = bestCutList;
+    }
+
+    function handleCutPieceListClear() {
+        console.log('Clear Cut List');
+
+        // Clear list of cut pieces
+        cutPieces = [];
+
+        // Clear cut pieces displayed
+        cutPieceListComponent.clear();
+    }
+
+    function handleUncutPieceListClear() {
+        console.log('Clear Uncut List');
+
+        // Clear list of uncut pieces
+        uncutPieces = [];
+
+        // Clear uncut pieces displayed
+        uncutPieceListComponent.clear();
     }
 
     return {
