@@ -21,8 +21,6 @@ const cutListCalculatorComponent = (() => {
 
     let bestCutList;
 
-    let cutListElement;
-
     let cutPieceListComponent;
     let uncutPieceListComponent;
     let cutListComponent;
@@ -102,7 +100,9 @@ const cutListCalculatorComponent = (() => {
         cutPieces.push(cutPiece);
 
         // Display new CutPiece in list
-        cutPieceListComponent.addCutPieceComponent(CutPieceComponent(cutPiece));
+        cutPieceListComponent.addCutPieceComponent(
+            CutPieceComponent(cutPiece, handleCutPieceEditClick, handleCutPieceDeleteClick)
+        );
 
         return cutPiece;
     }
@@ -112,7 +112,9 @@ const cutListCalculatorComponent = (() => {
         uncutPieces.push(uncutPiece);
         
         // Display new UncutPiece
-        uncutPieceListComponent.addUncutPieceComponent(UncutPieceComponent(uncutPiece));
+        uncutPieceListComponent.addUncutPieceComponent(
+            UncutPieceComponent(uncutPiece, handleUncutPieceEditClick, handleUncutPieceDeleteClick)
+        );
 
         return uncutPiece;
     }
@@ -143,6 +145,22 @@ const cutListCalculatorComponent = (() => {
         );
         
         addUncutPiece(uncutPiece);
+    }
+
+    function handleCutPieceEditClick(e) {
+        e.preventDefault();
+    }
+
+    function handleUncutPieceEditClick(e) {
+        e.preventDefault();
+    }
+
+    function handleCutPieceDeleteClick(e) {
+        e.preventDefault();
+    }
+
+    function handleUncutPieceDeleteClick(e) {
+        e.preventDefault();
     }
     
     function handleCreateCutListClick(e) {
