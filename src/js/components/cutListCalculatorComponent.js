@@ -14,21 +14,22 @@ import CutPiece from "../cutPiece.js";
 import {UncutPiece, CrossSection} from "../uncutPiece.js";
 
 import { createElement } from "../utilities.js";
+import ConfirmModalComponent from "./confirmModalComponent.js";
 
 const cutListCalculatorComponent = (() => {
+    // TODO: Can remove since cut/uncut piece inside components insdie piece list component
     let cutPieces = [];
     let uncutPieces = [];
-
     let bestCutList;
 
     let cutPieceListComponent;
     let uncutPieceListComponent;
     let cutListComponent;
 
-    function init(cutPieces = [], uncutPieces = [], bestCutList = undefined) {
-        cutPieces = cutPieces;
-        uncutPieces = uncutPieces;
-        bestCutList = bestCutList;
+    function init(initCutPieces = [], initUncutPieces = [], initBestCutList = undefined) {
+        cutPieces = initCutPieces;
+        uncutPieces = initUncutPieces;
+        bestCutList = initBestCutList;
 
         let mainElement = document.querySelector('main');
         if (mainElement === null) {
@@ -99,7 +100,7 @@ const cutListCalculatorComponent = (() => {
         // Add CutPiece to array
         cutPieces.push(cutPiece);
 
-        // Display new CutPiece in list
+        // Display new CutPiece in DOM
         cutPieceListComponent.addCutPieceComponent(
             CutPieceComponent(cutPiece, handleCutPieceEditClick, handleCutPieceDeleteClick)
         );
@@ -111,12 +112,31 @@ const cutListCalculatorComponent = (() => {
         // Add UncutPiece to array
         uncutPieces.push(uncutPiece);
         
-        // Display new UncutPiece
+        // Display new UncutPiece in DOM
         uncutPieceListComponent.addUncutPieceComponent(
             UncutPieceComponent(uncutPiece, handleUncutPieceEditClick, handleUncutPieceDeleteClick)
         );
 
         return uncutPiece;
+    }
+
+    function removeCutPiece(cutPieceToRemove) {
+        let index;
+
+        // Find index of array
+        index = cutPieces.indexOf(cutPieceToRemove);
+        
+        // Return if no cut piece is found
+        if (index < 0) { return; }
+
+        // Remove cut piece from array
+        cutPieces.splice(index, 1);
+    }
+
+    function removeUncutPiece(uncutPiece) {
+        // Remove uncut piece from array
+
+        // Remove component from DOM
     }
 
     function handleCutPieceAddFormSubmit(e) {
@@ -148,24 +168,30 @@ const cutListCalculatorComponent = (() => {
     }
 
     function handleCutPieceEditClick(e) {
-        e.preventDefault();
+        
     }
 
     function handleUncutPieceEditClick(e) {
-        e.preventDefault();
+
     }
 
-    function handleCutPieceDeleteClick(e) {
-        e.preventDefault();
+    function handleCutPieceDeleteClick(e, cutPieceToDelete) {
+        document.body.prepend(
+            ConfirmModalComponent(() => {
+                handleCutPieceDeleteConfirm(e, cutPieceToDelete)
+            }).render()
+        );
+    }
+
+    function handleCutPieceDeleteConfirm(e, cutPieceToDelete) {
+        console.log('Delete cut piece ' + cutPieceToDelete);
     }
 
     function handleUncutPieceDeleteClick(e) {
-        e.preventDefault();
+
     }
     
     function handleCreateCutListClick(e) {
-        e.preventDefault();
-
         bestCutList = cutListCalculator.getCheapestCutList(
             cutPieces, 
             uncutPieces

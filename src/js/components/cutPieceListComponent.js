@@ -7,9 +7,26 @@ export default function CutPieceListComponent() {
     let cutPieceListElement;
 
     const addCutPieceComponent = function(...cutPieceComponentsToAdd) {
+        // Add cut piece components to array
         cutPieceComponents.push(...cutPieceComponentsToAdd);
+
+        // Add cut piece components to DOM
         for (const cutPieceComponent of cutPieceComponentsToAdd) {
             cutPieceListElement.appendChild(cutPieceComponent.render());
+        }
+    };
+
+    const removeCutPieceComponent = function(...cutPieceComponentsToRemove) {
+        let index;
+        for (const cutPieceComponent of cutPieceComponentsToRemove) {
+            index = cutPieceComponents.indexOf(cutPieceComponent);
+            if (index < 0) { continue; }
+
+            // Remove cut piece component from DOM
+            cutPieceComponent.remove();
+        
+            // Remove cut piece component from array
+            cutPieceComponents.splice(index, 1);
         }
     };
 
@@ -48,6 +65,7 @@ export default function CutPieceListComponent() {
     return {
         addCutPieceComponent,
         clear,
+        removeCutPieceComponent,
         render,
     };
 }
