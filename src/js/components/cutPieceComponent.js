@@ -7,8 +7,8 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
         editCallback(e);
     };
 
-    const handleDeleteClick = function(e) {
-        deleteCallback(e, cutPiece);
+    const handleDeleteClick = function() {
+        deleteCallback(cutPiece);
     };
 
     const remove = function() {
@@ -46,6 +46,7 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
     }
 
     return {
+        get cutPiece() { return cutPiece; },
         remove,
         render,
     };

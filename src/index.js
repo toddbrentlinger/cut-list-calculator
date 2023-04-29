@@ -101,15 +101,16 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
 
     const crossSection4x4 = new CrossSection(4,4);
     uncutPieces = [
-        new UncutPiece(crossSection4x4, 72, 1228),
-        new UncutPiece(crossSection4x4, 96, 1548),
-        new UncutPiece(crossSection4x4, 120, 2238),
-        new UncutPiece(crossSection4x4, 144, 2748),
+        new UncutPiece(crossSection4x4, 72, 12.28),
+        new UncutPiece(crossSection4x4, 96, 15.48),
+        new UncutPiece(crossSection4x4, 120, 22.38),
+        new UncutPiece(crossSection4x4, 144, 27.48),
     ];
     
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     cutListCalculatorComponent.init(cutPieces, uncutPieces);
+    window.cutListCalculatorComponent = cutListCalculatorComponent;
 
     // ------------------------------------------------------------------------
     

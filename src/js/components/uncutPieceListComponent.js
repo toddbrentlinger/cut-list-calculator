@@ -13,6 +13,35 @@ export default function UncutPieceListComponent() {
         }
     };
 
+    const removeUncutPieceComponent = function(...uncutPieceComponentsToRemove) {
+        let index;
+        for (const uncutPieceComponent of uncutPieceComponentsToRemove) {
+            index = uncutPieceComponents.indexOf(uncutPieceComponent);
+            if (index < 0) { continue; }
+
+            // Remove uncut piece component from DOM
+            uncutPieceComponent.remove();
+        
+            // Remove uncut piece component from array
+            uncutPieceComponents.splice(index, 1);
+        }
+    };
+
+    const removeUncutPiece = function(...uncutPiecesToRemove) {
+        let index;
+        for (const uncutPieceToRemove of uncutPiecesToRemove) {
+            index = uncutPieceComponents.findIndex((uncutPieceComponent) => uncutPieceComponent.uncutPiece === uncutPieceToRemove);
+
+            if (index < 0) { continue; }
+
+            // Remove uncut piece component from DOM
+            uncutPieceComponents[index].remove();
+        
+            // Remove uncut piece component from array
+            uncutPieceComponents.splice(index, 1);
+        }
+    };
+
     const clear = function() {
         // Remove uncut piece components from array
         uncutPieceComponents = [];
@@ -21,6 +50,12 @@ export default function UncutPieceListComponent() {
         while (uncutPieceListElement.firstChild) {
             uncutPieceListElement.removeChild(uncutPieceListElement.firstChild);
         }
+    };
+
+    const getPieces = function() {
+        return uncutPieceComponents.map((uncutPieceComponent) => {
+            return uncutPieceComponent.uncutPiece;
+        });
     };
 
     const render = function() {
@@ -47,6 +82,9 @@ export default function UncutPieceListComponent() {
     return {
         addUncutPieceComponent,
         clear,
+        getPieces,
+        removeUncutPiece,
+        removeUncutPieceComponent,
         render,
     };
 }

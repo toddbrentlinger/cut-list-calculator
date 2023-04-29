@@ -17,9 +17,6 @@ import { createElement } from "../utilities.js";
 import ConfirmModalComponent from "./confirmModalComponent.js";
 
 const cutListCalculatorComponent = (() => {
-    // TODO: Can remove since cut/uncut piece inside components insdie piece list component
-    let cutPieces = [];
-    let uncutPieces = [];
     let bestCutList;
 
     let cutPieceListComponent;
@@ -27,8 +24,6 @@ const cutListCalculatorComponent = (() => {
     let cutListComponent;
 
     function init(initCutPieces = [], initUncutPieces = [], initBestCutList = undefined) {
-        cutPieces = initCutPieces;
-        uncutPieces = initUncutPieces;
         bestCutList = initBestCutList;
 
         let mainElement = document.querySelector('main');
@@ -77,8 +72,8 @@ const cutListCalculatorComponent = (() => {
         );
 
         // Add any cut/uncut pieces passed as parameters
-        cutPieces.forEach((cutPiece) => addCutPiece(cutPiece));
-        uncutPieces.forEach((uncutPiece) => addUncutPiece(uncutPiece));
+        initCutPieces.forEach((cutPiece) => addCutPiece(cutPiece));
+        initUncutPieces.forEach((uncutPiece) => addUncutPiece(uncutPiece));
 
         // Add button that creates cut list with click event listener
         const createCutListBtn = mainElement.appendChild(
@@ -97,10 +92,6 @@ const cutListCalculatorComponent = (() => {
     }
 
     function addCutPiece(cutPiece) {
-        // Add CutPiece to array
-        cutPieces.push(cutPiece);
-
-        // Display new CutPiece in DOM
         cutPieceListComponent.addCutPieceComponent(
             CutPieceComponent(cutPiece, handleCutPieceEditClick, handleCutPieceDeleteClick)
         );
@@ -109,10 +100,6 @@ const cutListCalculatorComponent = (() => {
     }
 
     function addUncutPiece(uncutPiece) {
-        // Add UncutPiece to array
-        uncutPieces.push(uncutPiece);
-        
-        // Display new UncutPiece in DOM
         uncutPieceListComponent.addUncutPieceComponent(
             UncutPieceComponent(uncutPiece, handleUncutPieceEditClick, handleUncutPieceDeleteClick)
         );
@@ -121,22 +108,11 @@ const cutListCalculatorComponent = (() => {
     }
 
     function removeCutPiece(cutPieceToRemove) {
-        let index;
-
-        // Find index of array
-        index = cutPieces.indexOf(cutPieceToRemove);
-        
-        // Return if no cut piece is found
-        if (index < 0) { return; }
-
-        // Remove cut piece from array
-        cutPieces.splice(index, 1);
+        cutPieceListComponent.removeCutPiece(cutPieceToRemove);
     }
 
-    function removeUncutPiece(uncutPiece) {
-        // Remove uncut piece from array
-
-        // Remove component from DOM
+    function removeUncutPiece(uncutPieceToRemove) {
+        uncutPieceListComponent.removeUncutPiece(uncutPieceToRemove);
     }
 
     function handleCutPieceAddFormSubmit(e) {
@@ -168,33 +144,43 @@ const cutListCalculatorComponent = (() => {
     }
 
     function handleCutPieceEditClick(e) {
-        
+
     }
 
     function handleUncutPieceEditClick(e) {
 
     }
 
-    function handleCutPieceDeleteClick(e, cutPieceToDelete) {
+    function handleCutPieceDeleteClick(cutPieceToDelete) {
         document.body.prepend(
             ConfirmModalComponent(() => {
-                handleCutPieceDeleteConfirm(e, cutPieceToDelete)
+                handleCutPieceDeleteConfirm(cutPieceToDelete)
             }).render()
         );
     }
 
-    function handleCutPieceDeleteConfirm(e, cutPieceToDelete) {
+    function handleCutPieceDeleteConfirm(cutPieceToDelete) {
         console.log('Delete cut piece ' + cutPieceToDelete);
+        removeCutPiece(cutPieceToDelete);
     }
 
-    function handleUncutPieceDeleteClick(e) {
+    function handleUncutPieceDeleteClick(uncutPieceToDelete) {
+        document.body.prepend(
+            ConfirmModalComponent(() => {
+                handleUncutPieceDeleteConfirm(uncutPieceToDelete)
+            }).render()
+        );
+    }
 
+    function handleUncutPieceDeleteConfirm(uncutPieceToDelete) {
+        console.log('Delete uncut piece ' + uncutPieceToDelete);
+        removeUncutPiece(uncutPieceToDelete);
     }
     
-    function handleCreateCutListClick(e) {
+    function handleCreateCutListClick() {
         bestCutList = cutListCalculator.getCheapestCutList(
-            cutPieces, 
-            uncutPieces
+            cutPieceListComponent.getPieces(), 
+            uncutPieceListComponent.getPieces()
         );
 
         cutListComponent.cutList = bestCutList;
@@ -203,18 +189,12 @@ const cutListCalculatorComponent = (() => {
     function handleCutPieceListClear() {
         console.log('Clear Cut List');
 
-        // Clear list of cut pieces
-        cutPieces = [];
-
         // Clear cut pieces displayed
         cutPieceListComponent.clear();
     }
 
     function handleUncutPieceListClear() {
         console.log('Clear Uncut List');
-
-        // Clear list of uncut pieces
-        uncutPieces = [];
 
         // Clear uncut pieces displayed
         uncutPieceListComponent.clear();

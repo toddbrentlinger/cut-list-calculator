@@ -41,14 +41,16 @@ export default function CutListComponent(cutList) {
         const materialList = cutList.getMaterialList();
         const materialListTableBody = materialListTable.appendChild(document.createElement('tbody'));
         let totalPrice = 0;
+        let currPrice;
         for (const [uncutLength, uncutObj] of Object.entries(materialList)) {
+            currPrice = uncutObj.quantity * uncutObj.unitPrice;
             materialListTableBody.appendChild(createElement('tr', {}, 
                 createElement('td', {}, uncutObj.quantity),
                 createElement('td', {}, uncutLength),
                 createElement('td', {}, uncutObj.unitPrice),
-                createElement('td', {}, uncutObj.quantity * uncutObj.unitPrice)
+                createElement('td', {}, currPrice.toFixed(2))
             ));
-            totalPrice += uncutObj.quantity * uncutObj.unitPrice;
+            totalPrice += currPrice;
         }
 
         // Material List - Table Body - Total Price

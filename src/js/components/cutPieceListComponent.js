@@ -30,6 +30,21 @@ export default function CutPieceListComponent() {
         }
     };
 
+    const removeCutPiece = function(...cutPiecesToRemove) {
+        let index;
+        for (const cutPieceToRemove of cutPiecesToRemove) {
+            index = cutPieceComponents.findIndex((cutPieceComponent) => cutPieceComponent.cutPiece === cutPieceToRemove);
+
+            if (index < 0) { continue; }
+
+            // Remove cut piece component from DOM
+            cutPieceComponents[index].remove();
+        
+            // Remove cut piece component from array
+            cutPieceComponents.splice(index, 1);
+        }
+    };
+
     const clear = function() {
         // Remove cut piece components from array
         cutPieceComponents = [];
@@ -38,6 +53,12 @@ export default function CutPieceListComponent() {
         while (cutPieceListElement.firstChild) {
             cutPieceListElement.removeChild(cutPieceListElement.firstChild);
         }
+    };
+
+    const getPieces = function() {
+        return cutPieceComponents.map((cutPieceComponent) => {
+            return cutPieceComponent.cutPiece;
+        });
     };
 
     const render = function() {
@@ -65,6 +86,8 @@ export default function CutPieceListComponent() {
     return {
         addCutPieceComponent,
         clear,
+        getPieces,
+        removeCutPiece,
         removeCutPieceComponent,
         render,
     };
