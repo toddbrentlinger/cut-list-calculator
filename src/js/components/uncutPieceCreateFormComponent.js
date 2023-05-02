@@ -21,7 +21,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'uncut-thickness'}, 'Thickness:'),
-                createElement('input', {'type': 'text', 'name': 'thickness', 'id': 'uncut-thickness', 'size': '1'})
+                createElement('input', {'type': 'text', 'name': 'thickness', 'id': 'uncut-thickness', 'size': '1', 'required': 'true'})
             )
         );
 
@@ -29,7 +29,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'uncut-width'}, 'Width:'),
-                createElement('input', {'type': 'text', 'name': 'width', 'id': 'uncut-width', 'size': '1'})
+                createElement('input', {'type': 'text', 'name': 'width', 'id': 'uncut-width', 'size': '1', 'required': 'true'})
             )
         );
 
@@ -37,7 +37,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'uncut-length'}, 'Length:'),
-                createElement('input', {'type': 'text', 'name': 'length', 'id': 'uncut-length', 'size': '1'})
+                createElement('input', {'type': 'text', 'name': 'length', 'id': 'uncut-length', 'size': '1', 'required': 'true'})
             )
         );
 
@@ -45,7 +45,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'uncut-price'}, 'Price:'),
-                createElement('input', {'type': 'text', 'name': 'price', 'id': 'uncut-price', 'size': '1'})
+                createElement('input', {'type': 'text', 'name': 'price', 'id': 'uncut-price', 'size': '1', 'required': 'true'})
             )
         );
 
