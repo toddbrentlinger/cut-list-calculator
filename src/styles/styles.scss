@@ -72,14 +72,6 @@ footer {
     justify-content: center;
 }
 
-#cut-piece-create-form {
-
-}
-
-#uncut-piece-create-form {
-    
-}
-
 // Custom Classes
 
 .cut-sequence {
@@ -150,20 +142,26 @@ footer {
     .piece-list-body > .uncut-piece {
         @include baseGrid;
     }
-
-    .piece-list-head {
-
-    }
-
-    .piece-list-body {
-
-    }
 }
 
 // Misc
 
 h1, h2, h3 {
     text-align: center;
+}
+
+h1 {
+    font-size: 1.7em;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.2em;
+    margin: 1em 0;
 }
 
 table {

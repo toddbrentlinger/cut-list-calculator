@@ -3,6 +3,34 @@ import { createElement } from "../utilities.js";
 export default function UncutPieceCreateFormComponent(handleFormSubmit) {
     let formElement;
 
+    const isInputValidLength = function(inputElement) {
+        const tempValue = Number(inputElement.value);
+
+        if (isNaN(tempValue)) {
+            inputElement.setCustomValidity('Must be a number.');
+        } else if (tempValue <= 0) {
+            inputElement.setCustomValidity('Must be greater than zero.');
+        } else {
+            inputElement.setCustomValidity('');
+        }
+
+        inputElement.reportValidity();
+    };
+
+    const isInputValidPrice = function(inputElement) {
+        const tempValue = Number(inputElement.value);
+
+        if (isNaN(tempValue)) {
+            inputElement.setCustomValidity('Must be a number.');
+        } else if (tempValue < 0) {
+            inputElement.setCustomValidity('Must be greater than or equal to zero.');
+        } else {
+            inputElement.setCustomValidity('');
+        }
+
+        inputElement.reportValidity();
+    };
+
     const render = function() {
         formElement = createElement('form', {
             'action': '',
@@ -11,6 +39,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
             'id': 'uncut-piece-create-form',
             'class': 'piece-create-form',
         });
+        let tempInputElement;
 
         // Form - Form Inputs
         const formInputsElement = formElement.appendChild(
@@ -34,18 +63,22 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
         );
 
         // Form - Form Inputs - Length
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'uncut-length', 'size': '1', 'required': 'true'});
+        tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'uncut-length'}, 'Length:'),
-                createElement('input', {'type': 'text', 'name': 'length', 'id': 'uncut-length', 'size': '1', 'required': 'true'})
+                tempInputElement
             )
         );
 
         // Form - Form Inputs - Price
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'price', 'id': 'uncut-price', 'size': '1', 'required': 'true'});
+        tempInputElement.addEventListener('input', (e) => isInputValidPrice(e.target));
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'uncut-price'}, 'Price:'),
-                createElement('input', {'type': 'text', 'name': 'price', 'id': 'uncut-price', 'size': '1', 'required': 'true'})
+                tempInputElement
             )
         );
 

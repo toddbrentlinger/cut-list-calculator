@@ -3,6 +3,20 @@ import { createElement } from "../utilities.js";
 export default function CutPieceCreateFormComponent(handleFormSubmit) {
     let formElement;
 
+    const isInputValidLength = function(inputElement) {
+        const tempValue = Number(inputElement.value);
+
+        if (isNaN(tempValue)) {
+            inputElement.setCustomValidity('Must be a number.');
+        } else if (tempValue <= 0) {
+            inputElement.setCustomValidity('Must be greater than zero.');
+        } else {
+            inputElement.setCustomValidity('');
+        }
+
+        inputElement.reportValidity();
+    };
+
     const render = function() {
         formElement = createElement('form', {
             'action': '',
@@ -11,6 +25,7 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
             'id': 'cut-piece-create-form',
             'class': 'piece-create-form',
         });
+        let tempInputElement;
 
         // Form - Form Inputs
         const formInputsElement = formElement.appendChild(
@@ -35,10 +50,12 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         );
 
         // Form - Form Inputs - Length
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'cut-length', 'size': '1', 'required': 'true'});
+        tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'cut-length'}, 'Length:'),
-                createElement('input', {'type': 'text', 'name': 'length', 'id': 'cut-length', 'size': '1', 'required': 'true'})
+                tempInputElement
             )
         );
 
@@ -51,10 +68,12 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         );
 
         // Form - Form Inputs - Kerf
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'kerf', 'id': 'cut-kerf', 'value': '0.125', 'size': '1', 'required': 'true'});
+        tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'cut-kerf'}, 'Kerf:'),
-                createElement('input', {'type': 'text', 'name': 'kerf', 'id': 'cut-kerf', 'value': '0.125', 'size': '1', 'required': 'true'})
+                tempInputElement
             )
         );
 
@@ -67,12 +86,6 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
 
         // Add submit event listener
         formElement.addEventListener('submit', (e) => {
-            debugger;
-            if (!isValid()) {
-                e.preventDefault();
-                return; 
-            }
-
             if (handleFormSubmit !== undefined) {
                 handleFormSubmit(e);
             }
@@ -82,63 +95,6 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
 
         return formElement;
     }
-
-    const isValid = function() {
-        const inputElements = {
-            thickness: document.getElementById('cut-thickness'),
-            width: document.getElementById('cut-width'),
-            length: document.getElementById('cut-length'),
-            quantity: document.getElementById('cut-quantity'),
-            kerf: document.getElementById('cut-kerf'),
-        };
-
-        // Initialize each custom validity to blank string
-        for (const inputElement of Object.values(inputElements)) {
-            inputElement.setCustomValidity('');
-        }
-        
-        /**
-         * Thickness x Width is only used to identify pieces and not used in 
-         * math operations so it does not need to be a number.
-         * Perhaps check that thickness is smaller than width?
-         */
-
-        // Thickness
-        // Width
-
-        // Length
-        // TODO: Convert architectural units (ex. 75-1/8 => 75.125). Could event use feet (ex. 3'8-3/8" => 44.375)
-        // Must be a number
-        let tempValue = Number(inputElements.length.value);
-        if (isNaN(tempValue)) {
-            inputElements.length.setCustomValidity('Must be a number.');
-            return false;
-        }
-        // Must be greater than zero
-        if (tempValue <= 0) {
-            inputElements.length.setCustomValidity('Must be greater than zero.');
-            return false;
-        }
-
-        // Quantity
-        // Built-in validation good enough
-
-        // Kerf
-        // Must be a number
-        tempValue = Number(inputElements.kerf.value);
-        if (isNaN(tempValue)) {
-            inputElements.kerf.setCustomValidity('Must be a number.');
-            return false;
-        }
-        // Must be greater than zero
-        if (tempValue <= 0) {
-            inputElements.kerf.setCustomValidity('Must be greater than zero.');
-            return false;
-        }
-        
-        // If reach here, all form inputs are valid
-        return true;
-    };
 
     const updateForm = function() {
         let inputElement;

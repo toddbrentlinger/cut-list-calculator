@@ -22,6 +22,7 @@ const cutListCalculatorComponent = (() => {
     let cutPieceListComponent;
     let uncutPieceListComponent;
     let cutListComponent;
+    let cutListErrorElement;
 
     function init(initCutPieces = [], initUncutPieces = [], initBestCutList = undefined) {
         bestCutList = initBestCutList;
@@ -45,7 +46,7 @@ const cutListCalculatorComponent = (() => {
         mainElement.appendChild(
             createElement('div', {'class': 'clear-btn-container'})
         ).appendChild(
-            createElement('button', {'class': 'clear-btn'}, 'Clear')
+            createElement('button', {'class': 'clear-btn'}, 'Clear All Cut Pieces')
         ).addEventListener('click', handleCutPieceListClear);
         // Cut Pieces - List
         cutPieceListComponent = CutPieceListComponent();
@@ -61,7 +62,7 @@ const cutListCalculatorComponent = (() => {
         mainElement.appendChild(
             createElement('div', {'class': 'clear-btn-container'})
         ).appendChild(
-            createElement('button', {'class': 'clear-btn'}, 'Clear')
+            createElement('button', {'class': 'clear-btn'}, 'Clear All Uncut Pieces')
         ).addEventListener('click', handleUncutPieceListClear);
         // Uncut Pieces - List
         uncutPieceListComponent = UncutPieceListComponent();
@@ -82,6 +83,11 @@ const cutListCalculatorComponent = (() => {
             createElement('button', {'id': 'create-cut-list-btn'}, 'Create Cut List')
         );
         createCutListBtn.addEventListener('click', handleCreateCutListClick);
+
+        // Add error message for cut list calculator button
+        cutListErrorElement = mainElement.appendChild(
+            createElement('div', {'id': 'create-cut-list-error-msg'})
+        );
 
         // Add calculated cut list
         cutListComponent = CutListComponent();
@@ -178,6 +184,24 @@ const cutListCalculatorComponent = (() => {
     }
     
     function handleCreateCutListClick() {
+        const cutPieces = cutPieceListComponent.getPieces();
+        const uncutPieces = uncutPieceListComponent.getPieces();
+
+        if (!cutPieces.length) {
+            // No cutpieces
+            showCutListError('Add cut pieces to create a cut list');
+            return;
+        }
+        
+        if (!uncutPieces.length) {
+            // No uncut pieces
+            showCutListError('Add uncut pieces to create a cut list');
+            return;
+        }
+
+        // If reach here, no errors to show. Remove any previous errors.
+        clearCutListError();
+
         bestCutList = cutListCalculator.getCheapestCutList(
             cutPieceListComponent.getPieces(), 
             uncutPieceListComponent.getPieces()
@@ -198,6 +222,14 @@ const cutListCalculatorComponent = (() => {
 
         // Clear uncut pieces displayed
         uncutPieceListComponent.clear();
+    }
+
+    function showCutListError(errorMsg) {
+        cutListErrorElement.textContent = errorMsg;
+    }
+
+    function clearCutListError() {
+        cutListErrorElement.textContent = '';
     }
 
     return {
