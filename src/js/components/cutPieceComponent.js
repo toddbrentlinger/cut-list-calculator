@@ -36,9 +36,9 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
             createElement('div', {}, cutPiece.cutLength),
             createElement('div', {}, cutPiece.quantity),
             createElement('div', {}, cutPiece.kerf),
-            createElement('div', {}, 
+            createElement('div', {'class': 'piece-btn-container'},
                 editBtn,
-                deleteBtn
+                deleteBtn 
             )
         );
 

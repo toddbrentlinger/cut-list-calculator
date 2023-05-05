@@ -37,7 +37,7 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
             createElement('div', {}, uncutPiece.length),
             createElement('div', {}, uncutPiece.price),
             createElement('div'),
-            createElement('div', {}, 
+            createElement('div', {'class': 'piece-btn-container'}, 
                 editBtn,
                 deleteBtn
             )

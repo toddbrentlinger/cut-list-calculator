@@ -4,11 +4,24 @@
     display: grid;
     grid-template-columns: repeat($nColumns, 1fr);
     column-gap: 1rem;
+    justify-items: center;
+    align-items: center;
 }
 
 :root {
     --base-white: hsl(0, 0%, 95%);
     --base-black: hsl(0, 0%, 10%);
+
+    --primary: brown;
+    --secondary: orange;
+
+    --hover: hsl(0, 0%, 50%);
+    --active: hsl(0, 0%, 25%);
+
+    --success: green;
+    --info: gray;
+    --warning: orange;
+    --danger: red;
 }
 
 html {
@@ -53,6 +66,8 @@ header {
 
 main {
     grid-area: main;
+    display: grid;
+    gap: 1em;
 }
 
 // Footer
@@ -72,6 +87,12 @@ footer {
     justify-content: center;
 }
 
+#create-cut-list-error-msg {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
 // Custom Classes
 
 .cut-sequence {
@@ -83,6 +104,10 @@ footer {
     &:first-child {
         border-top: 2px solid var(--base-black, black);
     }
+}
+
+.hide {
+    display: none;
 }
 
 .input-container {
@@ -104,23 +129,41 @@ footer {
     overflow: auto; // Enable scroll if needed
     background-color: rgb(0, 0, 0); // Fallback color
     background-color: rgba(0, 0, 0, 0.4); // Black w/ opacity
+    // Grid
+    display: grid;
+    align-items: center;
+    justify-items: center;
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; // 15% from the top and centered
-    padding: 20px;
+    //margin: 15% auto; // 15% from the top and centered
+    padding: 2rem;
     border: 1px solid #888;
     width: 80%; // Could be more or less, depending on screen size
+    height: 50%;
+    // Grid
+    display: grid;
+    justify-content: center;
+    align-content: space-evenly;
 }
 
-.piece-create-form, .piece-list {
-    padding: 1rem;
+.modal-content-btn-container,
+.piece-btn-container {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1em;
+}
+
+.piece-create-form, 
+.piece-list {
+    border: 2px solid var(--base-black, black);
+    //margin: 1rem 0;
 }
 
 .piece-create-form {
-    border: 2px solid var(--base-black, black);
-    margin: 1rem 0;
+    // border: 2px solid var(--base-black, black);
+    // margin: 1rem 0;
 
     .form-inputs {
         @include baseGrid;
@@ -137,10 +180,24 @@ footer {
 }
 
 .piece-list {
+    // border: 2px solid var(--base-black, black);
+
     .piece-list-head, 
     .piece-list-body > .cut-piece,
     .piece-list-body > .uncut-piece {
         @include baseGrid;
+    }
+}
+
+.piece-list-body {
+    .cut-piece:nth-child(odd),
+    .uncut-piece:nth-child(odd) {
+        background-color: hsl(0, 0%, 85%);
+    }
+
+    .cut-piece:nth-child(even),
+    .uncut-piece:nth-child(even) {
+        background-color: hsl(0, 0%, 75%);
     }
 }
 
@@ -156,12 +213,12 @@ h1 {
 
 h2 {
     font-size: 1.5em;
-    margin: 0.83em 0;
+    //margin: 0.83em 0;
 }
 
 h3 {
     font-size: 1.2em;
-    margin: 1em 0;
+    //margin: 1em 0;
 }
 
 table {
@@ -184,5 +241,21 @@ table {
     th, td {
         padding: 0.5rem 1rem;
         border: 2px solid var(--base-black, black);
+    }
+}
+
+button, input[type=submit] {
+    appearance: none;
+    border: 1px solid var(--base-black, black);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--hover, hsl(0, 0%, 50%));
+        color: var(--base-white, white);
+    }
+
+    &:active {
+        background-color: var(--active, hsl(0, 0%, 25%));
     }
 }

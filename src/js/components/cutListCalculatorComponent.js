@@ -86,7 +86,7 @@ const cutListCalculatorComponent = (() => {
 
         // Add error message for cut list calculator button
         cutListErrorElement = mainElement.appendChild(
-            createElement('div', {'id': 'create-cut-list-error-msg'})
+            createElement('div', {'id': 'create-cut-list-error-msg', 'class': 'hide'})
         );
 
         // Add calculated cut list
@@ -161,7 +161,9 @@ const cutListCalculatorComponent = (() => {
         document.body.prepend(
             ConfirmModalComponent(() => {
                 handleCutPieceDeleteConfirm(cutPieceToDelete)
-            }).render()
+            },
+            'Are you sure you want to delete the cut piece?'
+            ).render()
         );
     }
 
@@ -174,7 +176,9 @@ const cutListCalculatorComponent = (() => {
         document.body.prepend(
             ConfirmModalComponent(() => {
                 handleUncutPieceDeleteConfirm(uncutPieceToDelete)
-            }).render()
+            },
+            'Are you sure you want to delete the uncut piece?'
+            ).render()
         );
     }
 
@@ -189,13 +193,13 @@ const cutListCalculatorComponent = (() => {
 
         if (!cutPieces.length) {
             // No cutpieces
-            showCutListError('Add cut pieces to create a cut list');
+            showCutListError('Add cut pieces to create a new cut list');
             return;
         }
         
         if (!uncutPieces.length) {
             // No uncut pieces
-            showCutListError('Add uncut pieces to create a cut list');
+            showCutListError('Add uncut pieces to create a new cut list');
             return;
         }
 
@@ -225,10 +229,12 @@ const cutListCalculatorComponent = (() => {
     }
 
     function showCutListError(errorMsg) {
+        cutListErrorElement.classList.remove('hide');
         cutListErrorElement.textContent = errorMsg;
     }
 
     function clearCutListError() {
+        cutListErrorElement.classList.add('hide');
         cutListErrorElement.textContent = '';
     }
 
