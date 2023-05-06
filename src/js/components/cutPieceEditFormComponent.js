@@ -1,14 +1,14 @@
 import { createElement, isInputValidLength } from "../utilities.js";
 
-export default function CutPieceCreateFormComponent(handleFormSubmit) {
+export default function CutPieceEditFormComponent(cutPiece, handleEditConfirm, handleEditCancel) {
     let formElement;
 
     const render = function() {
         formElement = createElement('form', {
             'action': '',
             'method': 'get',
-            'name': 'cut-piece-create',
-            'id': 'cut-piece-create-form',
+            'name': 'cut-piece-edit',
+            'id': 'cut-piece-edit-form',
             'class': 'piece-form',
         });
         let tempInputElement;
@@ -22,7 +22,7 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'cut-thickness'}, 'Thickness:'),
-                createElement('input', {'type': 'text', 'name': 'thickness', 'id': 'cut-thickness', 'size': '1', 'required': 'true'}),
+                createElement('input', {'type': 'text', 'name': 'thickness', 'id': 'cut-thickness', 'size': '1', 'required': 'true', 'value': cutPiece.thickness}),
                 createElement('span', {'class': 'error', 'aria-live': 'polite'})
             )
         );
@@ -31,12 +31,12 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'cut-width'}, 'Width:'),
-                createElement('input', {'type': 'text', 'name': 'width', 'id': 'cut-width', 'size': '1', 'required': 'true'})
+                createElement('input', {'type': 'text', 'name': 'width', 'id': 'cut-width', 'size': '1', 'required': 'true', 'value': cutPiece.width})
             )
         );
 
         // Form - Form Inputs - Length
-        tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'cut-length', 'size': '1', 'required': 'true'});
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'cut-length', 'size': '1', 'required': 'true', 'value': cutPiece.cutLength});
         // Add input listener that adds custom validity if input value is NOT valid
         tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(
@@ -50,12 +50,12 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
                 createElement('label', {'for': 'cut-quantity'}, 'Quantity:'),
-                createElement('input', {'type': 'number', 'name': 'quantity', 'id': 'cut-quantity', 'value': '1', 'min': '1', 'required': 'true'})
+                createElement('input', {'type': 'number', 'name': 'quantity', 'id': 'cut-quantity', 'min': '1', 'required': 'true', 'value': cutPiece.quantity})
             )
         );
 
         // Form - Form Inputs - Kerf
-        tempInputElement = createElement('input', {'type': 'text', 'name': 'kerf', 'id': 'cut-kerf', 'value': '0.125', 'size': '1', 'required': 'true'});
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'kerf', 'id': 'cut-kerf', 'size': '1', 'required': 'true', 'value': cutPiece.kerf});
         // Add input listener that adds custom validity if input value is NOT valid
         tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(
@@ -65,41 +65,34 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
             )
         );
 
-        // Form - Form Submit Container
-        formElement.appendChild(
-            createElement('div', {'class': 'piece-form-btn-container'}, 
-                createElement('input', {'type': 'submit', 'value': 'Add'})
-            )
+        // Form - Button Container
+        const formBtnContainer = formElement.appendChild(
+            createElement('div', {'class': 'piece-form-btn-container'})
+        );
+
+        // Form - Submit/Edit Confirm
+        formBtnContainer.appendChild(
+            createElement('input', {'type': 'submit', 'value': 'Update'})
         );
 
         // Add submit event listener
         formElement.addEventListener('submit', (e) => {
-            if (handleFormSubmit !== undefined) {
-                handleFormSubmit(e);
+            if (handleEditConfirm !== undefined) {
+                handleEditConfirm(e);
             }
+        });
 
-            updateForm();
+        // Form - Cancel/Exit
+        formBtnContainer.appendChild(
+            createElement('button', {'type': 'button'}, 'Cancel')
+        ).addEventListener('click', (e) => {
+            if (handleEditCancel !== undefined) {
+                handleEditCancel(e);
+            }
         });
 
         return formElement;
-    }
-
-    const updateForm = function() {
-        let inputElement;
-
-        // Reset input fields for cut length and quantity, leaving other inputs with user entered data.
-        // Focus cursor on last input which should be cut length field
-        ['quantity', 'length'].forEach((inputName, index, arr) => {
-            inputElement = formElement.elements.namedItem(inputName);
-            if (inputElement) {
-                inputElement.value = inputElement.defaultValue;
-
-                if (index == (arr.length - 1)) {
-                    inputElement.focus();
-                }
-            }
-        });
-    }
+    };
 
     return {
         render,

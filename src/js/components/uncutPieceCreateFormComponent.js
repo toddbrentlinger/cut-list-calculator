@@ -1,35 +1,7 @@
-import { createElement } from "../utilities.js";
+import { createElement, isInputValidLength, isInputValidPrice } from "../utilities.js";
 
 export default function UncutPieceCreateFormComponent(handleFormSubmit) {
     let formElement;
-
-    const isInputValidLength = function(inputElement) {
-        const tempValue = Number(inputElement.value);
-
-        if (isNaN(tempValue)) {
-            inputElement.setCustomValidity('Must be a number.');
-        } else if (tempValue <= 0) {
-            inputElement.setCustomValidity('Must be greater than zero.');
-        } else {
-            inputElement.setCustomValidity('');
-        }
-
-        inputElement.reportValidity();
-    };
-
-    const isInputValidPrice = function(inputElement) {
-        const tempValue = Number(inputElement.value);
-
-        if (isNaN(tempValue)) {
-            inputElement.setCustomValidity('Must be a number.');
-        } else if (tempValue < 0) {
-            inputElement.setCustomValidity('Must be greater than or equal to zero.');
-        } else {
-            inputElement.setCustomValidity('');
-        }
-
-        inputElement.reportValidity();
-    };
 
     const render = function() {
         formElement = createElement('form', {
@@ -37,13 +9,13 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
             'method': 'get',
             'name': 'uncut-piece-create',
             'id': 'uncut-piece-create-form',
-            'class': 'piece-create-form',
+            'class': 'piece-form',
         });
         let tempInputElement;
 
         // Form - Form Inputs
         const formInputsElement = formElement.appendChild(
-            createElement('div', {'class': 'form-inputs'})
+            createElement('div', {'class': 'piece-form-inputs'})
         );
 
         // Form - Form Inputs - Thickness
@@ -64,6 +36,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
 
         // Form - Form Inputs - Length
         tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'uncut-length', 'size': '1', 'required': 'true'});
+        // Add input listener that adds custom validity if input value is NOT valid
         tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
@@ -74,6 +47,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
 
         // Form - Form Inputs - Price
         tempInputElement = createElement('input', {'type': 'text', 'name': 'price', 'id': 'uncut-price', 'size': '1', 'required': 'true'});
+        // Add input listener that adds custom validity if input value is NOT valid
         tempInputElement.addEventListener('input', (e) => isInputValidPrice(e.target));
         formInputsElement.appendChild(
             createElement('div', {'class': 'input-container'}, 
@@ -84,7 +58,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
 
         // Form - Form Submit Container
         formElement.appendChild(
-            createElement('div', {'class': 'submit-container'}, 
+            createElement('div', {'class': 'piece-form-btn-container'}, 
                 createElement('input', {'type': 'submit', 'value': 'Add'})
             )
         );

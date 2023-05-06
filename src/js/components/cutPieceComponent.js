@@ -1,10 +1,32 @@
 import { createElement } from "../utilities.js";
+import CutPieceEditFormComponent from "./cutPieceEditFormComponent.js";
 
 export default function CutPieceComponent(cutPiece, editCallback, deleteCallback) {
     let element;
     
     const handleEditClick = function(e) {
-        editCallback(e);
+        clearElement();
+
+        element.appendChild(
+            CutPieceEditFormComponent(cutPiece, handleEditConfirm, handleEditCancel).render()
+        );
+    };
+
+    const handleEditConfirm = function(e) {
+        e.preventDefault();
+
+        console.log('Edit Confirm inside component');
+        console.log(cutPiece);
+        console.log(e);
+
+        editCallback(e, cutPiece);
+
+        render();
+    };
+
+    const handleEditCancel = function(e) {
+        console.log('Edit Cancel');
+        render();
     };
 
     const handleDeleteClick = function() {
@@ -15,13 +37,17 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
         element.remove();
     };
 
+    const clearElement = function() {
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    };
+
     const render = function() {
         if (element === undefined) {
             element = createElement('div', {'class': 'cut-piece'});
         } else {
-            while (element.firstChild) {
-                element.removeChild(element.firstChild);
-            }
+            clearElement();
         }
         const editBtn = createElement('button', {}, 'Edit');
         const deleteBtn = createElement('button', {}, 'Delete');

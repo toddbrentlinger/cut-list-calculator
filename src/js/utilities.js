@@ -17,3 +17,31 @@ export function createElement(type, props = {}, ...children) {
 
     return element;
 }
+
+export function isInputValidLength(inputElement) {
+    const tempValue = Number(inputElement.value);
+
+    if (isNaN(tempValue)) {
+        inputElement.setCustomValidity('Must be a number.');
+    } else if (tempValue <= 0) {
+        inputElement.setCustomValidity('Must be greater than zero.');
+    } else {
+        inputElement.setCustomValidity('');
+    }
+
+    inputElement.reportValidity();
+}
+
+export function isInputValidPrice(inputElement) {
+    const tempValue = Number(inputElement.value);
+
+    if (isNaN(tempValue)) {
+        inputElement.setCustomValidity('Must be a number.');
+    } else if (tempValue < 0) {
+        inputElement.setCustomValidity('Must be greater than or equal to zero.');
+    } else {
+        inputElement.setCustomValidity('');
+    }
+
+    inputElement.reportValidity();
+}

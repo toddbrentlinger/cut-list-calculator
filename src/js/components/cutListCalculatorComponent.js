@@ -149,11 +149,12 @@ const cutListCalculatorComponent = (() => {
         addUncutPiece(uncutPiece);
     }
 
-    function handleCutPieceEditClick(e) {
-
+    function handleCutPieceEditClick(e, cutPiece) {
+        console.log('Edit confirm inside app');
+        debugger;
     }
 
-    function handleUncutPieceEditClick(e) {
+    function handleUncutPieceEditClick(e, uncutPiece) {
 
     }
 

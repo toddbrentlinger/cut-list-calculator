@@ -155,17 +155,17 @@ footer {
     gap: 1em;
 }
 
-.piece-create-form, 
+.piece-form, 
 .piece-list {
     border: 2px solid var(--base-black, black);
     //margin: 1rem 0;
 }
 
-.piece-create-form {
+.piece-form {
     // border: 2px solid var(--base-black, black);
     // margin: 1rem 0;
 
-    .form-inputs {
+    .piece-form-inputs {
         @include baseGrid;
 
         .input-container {
@@ -173,7 +173,7 @@ footer {
         }
     }
 
-    .submit-container {
+    .piece-form-btn-container {
         display: grid;
         justify-content: center;
     }
