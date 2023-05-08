@@ -60,8 +60,8 @@ export const cutList = {
         for (let i = startIndex; i < availableCutPiecesByIndex.length; i++) {
 
 
-            // Check if cutLength equal to remaining length (DO NOT INCLUDE KERF)
-            if (individualCutPieces[availableCutPiecesByIndex[i]].cutLength == remainingLength) {
+            // Check if cut length equal to remaining length (DO NOT INCLUDE KERF)
+            if (individualCutPieces[availableCutPiecesByIndex[i]].length == remainingLength) {
                 // Remove cutPiece index from availableCutPiecesByIndex to avoid same cutPiece
                 // being selected for than once.
                 availableCutPiecesByIndex.splice(i, 1);
@@ -69,7 +69,7 @@ export const cutList = {
                 return [ individualCutPieces[availableCutPiecesByIndex[i]], 0 ];
             }
 
-            // Find index of largest cutLength that can be cut with remainingLength (INCLUDE KERF)
+            // Find index of largest cut length that can be cut with remainingLength (INCLUDE KERF)
             if ((selectedCutPieceIndex == undefined) 
                 && (individualCutPieces[availableCutPiecesByIndex[i]].cutWithKerf < remainingLength)
             ) {

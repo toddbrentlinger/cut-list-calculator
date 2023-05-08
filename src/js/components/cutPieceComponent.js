@@ -16,11 +16,16 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
         e.preventDefault();
 
         console.log('Edit Confirm inside component');
-        console.log(cutPiece);
-        console.log(e);
 
         editCallback(e, cutPiece);
-
+        
+        // Change cutPiece values to form input values
+        cutPiece.thickness = Number(e.target.elements.namedItem('thickness').value);
+        cutPiece.width = Number(e.target.elements.namedItem('width').value);
+        cutPiece.length = Number(e.target.elements.namedItem('length').value);
+        cutPiece.quantity = Number(e.target.elements.namedItem('quantity').value);
+        cutPiece.kerf = Number(e.target.elements.namedItem('kerf').value);
+        
         render();
     };
 
@@ -59,7 +64,7 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
         element.append(
             createElement('div', {}, cutPiece.thickness),
             createElement('div', {}, cutPiece.width),
-            createElement('div', {}, cutPiece.cutLength),
+            createElement('div', {}, cutPiece.length),
             createElement('div', {}, cutPiece.quantity),
             createElement('div', {}, cutPiece.kerf),
             createElement('div', {'class': 'piece-btn-container'},

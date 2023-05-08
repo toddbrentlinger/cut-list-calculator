@@ -8,8 +8,8 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
 
 (() => {
     function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {
-        // Sort cutPieces by cutLength in decreasing order
-        cutPieces.sort((a,b) => b.cutLength - a.cutLength);
+        // Sort cutPieces by length in decreasing order
+        cutPieces.sort((a,b) => b.length - a.length);
 
         // Create array where each value represents a single quantity cutPiece
         // instead of normal array of cutPieces that has any number quantity in the

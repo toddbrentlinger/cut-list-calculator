@@ -1,6 +1,11 @@
 import { CutList } from "./cutList.js";
 import CutSequence from "./cutSequence.js";
 
+/**
+ * TODO: While looping through combinations of uncut pieces, if the combination 
+ * price is higher than the current best cut list price, then can skip.
+ */
+
 const cutListCalculator = (() => {
     let bestCutList;
 
@@ -171,10 +176,15 @@ const cutListCalculator = (() => {
     }
 
     function getCheapestCutList(cutPieces, uncutPieces) {
+        // Check for empty pieces
+        if (!cutPieces.length || !uncutPieces) {
+            return;
+        }
+
         bestCutList = undefined;
 
-        // Sort cutPieces by cutLength in decreasing order
-        cutPieces.sort((a,b) => b.cutLength - a.cutLength);
+        // Sort cutPieces by cut length in decreasing order
+        cutPieces.sort((a,b) => b.length - a.length);
 
         // Sort availableLengthsArr in decreasing order
         //availableLengthsArr.sort((a,b) => b - a);

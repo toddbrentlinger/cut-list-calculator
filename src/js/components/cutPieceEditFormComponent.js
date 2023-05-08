@@ -36,7 +36,7 @@ export default function CutPieceEditFormComponent(cutPiece, handleEditConfirm, h
         );
 
         // Form - Form Inputs - Length
-        tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'cut-length', 'size': '1', 'required': 'true', 'value': cutPiece.cutLength});
+        tempInputElement = createElement('input', {'type': 'text', 'name': 'length', 'id': 'cut-length', 'size': '1', 'required': 'true', 'value': cutPiece.length});
         // Add input listener that adds custom validity if input value is NOT valid
         tempInputElement.addEventListener('input', (e) => isInputValidLength(e.target));
         formInputsElement.appendChild(

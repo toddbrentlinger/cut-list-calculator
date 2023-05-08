@@ -149,13 +149,43 @@ const cutListCalculatorComponent = (() => {
         addUncutPiece(uncutPiece);
     }
 
-    function handleCutPieceEditClick(e, cutPiece) {
-        console.log('Edit confirm inside app');
-        debugger;
+    function handleCutPieceEditClick(e, oldCutPiece) {
+        // Create a new CutPiece from form input values
+        const newCutPiece = new CutPiece(
+            Number(e.target.elements.namedItem('thickness').value),
+            Number(e.target.elements.namedItem('width').value),
+            Number(e.target.elements.namedItem('length').value),
+            Number(e.target.elements.namedItem('quantity').value),
+            Number(e.target.elements.namedItem('kerf').value)
+        );
+        
+        // Check that new CutPiece is not a duplicate thickness x width x length combo
+        cutPieceListComponent.getPieces().forEach((cutPiece) => {
+            if (cutPiece !== oldCutPiece && cutPiece === newCutPiece) {
+                return;
+            }
+        });
+
+        // If reach here, new CutPiece is valid
     }
 
-    function handleUncutPieceEditClick(e, uncutPiece) {
+    function handleUncutPieceEditClick(e, oldUncutPiece) {
+        // Create a new UncutPiece from form input values
+        const newUncutPiece = new CutPiece(
+            Number(e.target.elements.namedItem('thickness').value),
+            Number(e.target.elements.namedItem('width').value),
+            Number(e.target.elements.namedItem('length').value),
+            Number(e.target.elements.namedItem('price').value),
+        );
+        
+        // Check that new CutPiece is not a duplicate thickness x width x length combo
+        cutPieceListComponent.getPieces().forEach((cutPiece) => {
+            if (cutPiece !== oldCutPiece && cutPiece === newCutPiece) {
+                return;
+            }
+        });
 
+        // If reach here, new CutPiece is valid
     }
 
     function handleCutPieceDeleteClick(cutPieceToDelete) {

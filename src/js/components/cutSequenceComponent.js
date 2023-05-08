@@ -20,7 +20,7 @@ export default function CutSequenceComponent(cutSequence) {
 
             // Cut Pieces
             tempRowElement.appendChild(
-                createElement('td', {}, cutPiece.cutLength)
+                createElement('td', {}, cutPiece.length)
             );
 
             // Remaining Length (last row only)
