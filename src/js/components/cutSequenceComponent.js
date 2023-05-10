@@ -10,7 +10,7 @@ export default function CutSequenceComponent(cutSequence) {
             // Add uncut piece if first row OR add row that spans rest of rows for this cut sequence.
             if (index === 0) {
                 tempRowElement.appendChild(
-                    createElement('td', {}, `${cutSequence.uncutPiece.crossSection.thickness}x${cutSequence.uncutPiece.crossSection.width}x${cutSequence.uncutPiece.length}`)
+                    createElement('td', {}, `${cutSequence.uncutPiece.thickness}x${cutSequence.uncutPiece.width}x${cutSequence.uncutPiece.length}`)
                 );
             } else if (index === 1) {
                 tempRowElement.appendChild(

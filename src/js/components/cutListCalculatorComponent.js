@@ -141,7 +141,8 @@ const cutListCalculatorComponent = (() => {
 
         // Create UncutPiece from form inputs
         const uncutPiece = new UncutPiece(
-            new CrossSection(Number(e.target.elements.namedItem('thickness').value), Number(e.target.elements.namedItem('width').value)),
+            Number(e.target.elements.namedItem('thickness').value), 
+            Number(e.target.elements.namedItem('width').value),
             Number(e.target.elements.namedItem('length').value),
             Number(e.target.elements.namedItem('price').value),
         );
@@ -178,9 +179,9 @@ const cutListCalculatorComponent = (() => {
             Number(e.target.elements.namedItem('price').value),
         );
         
-        // Check that new CutPiece is not a duplicate thickness x width x length combo
-        cutPieceListComponent.getPieces().forEach((cutPiece) => {
-            if (cutPiece !== oldCutPiece && cutPiece === newCutPiece) {
+        // Check that new UncutPiece is not a duplicate thickness x width x length combo
+        uncutPieceListComponent.getPieces().forEach((uncutPiece) => {
+            if (uncutPiece !== oldUncutPiece && uncutPiece === newUncutPiece) {
                 return;
             }
         });

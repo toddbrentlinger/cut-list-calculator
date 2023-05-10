@@ -80,10 +80,10 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
 
     const crossSection2x4 = new CrossSection(2,4);
     let uncutPieces = [
-        new UncutPiece(crossSection2x4, 48, 275),
-        new UncutPiece(crossSection2x4, 96, 298),
-        new UncutPiece(crossSection2x4, 120, 386),
-        new UncutPiece(crossSection2x4, 144, 462),
+        new UncutPiece(2, 4, 48, 275),
+        new UncutPiece(2, 4, 96, 298),
+        new UncutPiece(2, 4, 120, 386),
+        new UncutPiece(2, 4, 144, 462),
     ];
 
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
@@ -101,10 +101,10 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
 
     const crossSection4x4 = new CrossSection(4,4);
     uncutPieces = [
-        new UncutPiece(crossSection4x4, 72, 12.28),
-        new UncutPiece(crossSection4x4, 96, 15.48),
-        new UncutPiece(crossSection4x4, 120, 22.38),
-        new UncutPiece(crossSection4x4, 144, 27.48),
+        new UncutPiece(4, 4, 72, 12.28),
+        new UncutPiece(4, 4, 96, 15.48),
+        new UncutPiece(4, 4, 120, 22.38),
+        new UncutPiece(4, 4, 144, 27.48),
     ];
     
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
@@ -117,10 +117,10 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
     console.log('Test: Saw Horses');
 
     uncutPieces = [
-        new UncutPiece(crossSection2x4, 48, 275),
-        new UncutPiece(crossSection2x4, 96, 298),
-        new UncutPiece(crossSection2x4, 120, 386),
-        new UncutPiece(crossSection2x4, 144, 462),
+        new UncutPiece(2, 4, 48, 275),
+        new UncutPiece(2, 4, 96, 298),
+        new UncutPiece(2, 4, 120, 386),
+        new UncutPiece(2, 4, 144, 462),
     ];
     cutPieces = [
         new CutPiece(2, 4, 36, 4),
@@ -135,11 +135,11 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
     console.log('Test: Wood Shed');
 
     uncutPieces = [
-        new UncutPiece(crossSection2x4, 48, 275),
-        new UncutPiece(crossSection2x4, 96, 298),
-        new UncutPiece(crossSection2x4, 120, 386),
-        new UncutPiece(crossSection2x4, 144, 462),
-        new UncutPiece(crossSection2x4, 16*12, 616),
+        new UncutPiece(2, 4, 48, 275),
+        new UncutPiece(2, 4, 96, 298),
+        new UncutPiece(2, 4, 120, 386),
+        new UncutPiece(2, 4, 144, 462),
+        new UncutPiece(2, 4, 16*12, 616),
     ];
     cutPieces = [
         new CutPiece(2, 4, 15*12+11, 4),

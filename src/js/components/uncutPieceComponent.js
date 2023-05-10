@@ -1,10 +1,33 @@
 import { createElement } from "../utilities.js";
+import UncutPieceEditFormComponent from "./uncutPieceEditFormComponent.js";
 
 export default function UncutPieceComponent(uncutPiece, editCallback, deleteCallback) {
     let element;
     
-    const handleEditClick = function(e) {
-        editCallback(e);
+    const handleEditClick = function() {
+        clearElement();
+
+        element.appendChild(
+            UncutPieceEditFormComponent(uncutPiece, handleEditConfirm, handleEditCancel).render()
+        );
+    };
+
+    const handleEditConfirm = function(e) {
+        e.preventDefault();
+
+        editCallback(e, uncutPiece);
+        
+        // Change uncutPiece values to form input values
+        uncutPiece.thickness = Number(e.target.elements.namedItem('thickness').value);
+        uncutPiece.width = Number(e.target.elements.namedItem('width').value);
+        uncutPiece.length = Number(e.target.elements.namedItem('length').value);
+        uncutPiece.price = Number(e.target.elements.namedItem('price').value);
+        
+        render();
+    };
+
+    const handleEditCancel = function() {
+        render();
     };
 
     const handleDeleteClick = function() {
@@ -15,13 +38,17 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
         element.remove();
     };
 
+    const clearElement = function() {
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    };
+
     const render = function() {
         if (element === undefined) {
             element = createElement('div', {'class': 'uncut-piece'});
         } else {
-            while (element.firstChild) {
-                element.removeChild(element.firstChild);
-            }
+            clearElement();
         }
 
         const editBtn = createElement('button', {}, 'Edit');
@@ -32,8 +59,8 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
         deleteBtn.addEventListener('click', handleDeleteClick);
 
         element.append(
-            createElement('div', {}, uncutPiece.crossSection.thickness),
-            createElement('div', {}, uncutPiece.crossSection.width),
+            createElement('div', {}, uncutPiece.thickness),
+            createElement('div', {}, uncutPiece.width),
             createElement('div', {}, uncutPiece.length),
             createElement('div', {}, uncutPiece.price),
             createElement('div'),
