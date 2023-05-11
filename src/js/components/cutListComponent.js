@@ -91,6 +91,7 @@ export default function CutListComponent(cutList) {
             cutList = newCutList;
             clear();
             render();
+            element.scrollIntoView();
         },
     };
 }

@@ -1,6 +1,6 @@
 import { createElement } from "../utilities.js";
 
-export default function Footer(copyrightYear) {
+export default function FooterComponent(copyrightYear) {
     const render = function() {
         const footer = document.createElement('footer');
         const currYear = new Date().getFullYear();

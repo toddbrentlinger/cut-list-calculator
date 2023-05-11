@@ -1,26 +1,20 @@
-import Footer from "./footer.js";
+import FooterComponent from "./footerComponent.js";
 
-import CutPieceCreateFormComponent from "./cutPieceCreateFormComponent.js";
-import UncutPieceCreateFormComponent from "./uncutPieceCreateFormComponent.js";
+import CutPieceSectionComponent from "./cutPieceSectionComponent.js";
+import UncutPieceSectionComponent from "./uncutPieceSectionComponent.js";
 
-import CutPieceComponent from "./cutPieceComponent.js";
-import CutPieceListComponent from "./cutPieceListComponent.js";
-import UncutPieceComponent from "./uncutPieceComponent.js";
-import UncutPieceListComponent from "./uncutPieceListComponent.js";
 import CutListComponent from "./cutListComponent.js";
 
 import cutListCalculator from "../cutListCalculator.js";
-import CutPiece from "../cutPiece.js";
-import {UncutPiece, CrossSection} from "../uncutPiece.js";
 
 import { createElement } from "../utilities.js";
-import ConfirmModalComponent from "./confirmModalComponent.js";
 
 const cutListCalculatorComponent = (() => {
-    let bestCutList;
+    const cutPieceSectionComponent = CutPieceSectionComponent();
+    const uncutPieceSectionComponent = UncutPieceSectionComponent();
 
-    let cutPieceListComponent;
-    let uncutPieceListComponent;
+    let bestCutList;
+    
     let cutListComponent;
     let cutListErrorElement;
 
@@ -38,43 +32,13 @@ const cutListCalculatorComponent = (() => {
             'Dimensional lumber comes in pre-determined lengths with their own individual prices (Uncut Pieces). Given the cut lengths of dimensional lumber required for your project (Cut Pieces) and the available pre-determined lengths, this app calculates the cheapest amount of lumber needed and provides the cut sequence for each uncut piece.'
         ));
 
-        // Add cut/uncut pieces list with create form after
-
-        // Cut Pieces - Header
-        mainElement.appendChild(createElement('h2', {}, 'Cut Pieces:'));
-        // Cut Pieces - Clear Button
-        mainElement.appendChild(
-            createElement('div', {'class': 'clear-btn-container'})
-        ).appendChild(
-            createElement('button', {'class': 'clear-btn'}, 'Clear All Cut Pieces')
-        ).addEventListener('click', handleCutPieceListClear);
-        // Cut Pieces - List
-        cutPieceListComponent = CutPieceListComponent();
-        mainElement.appendChild(cutPieceListComponent.render());
-        // Cut Pieces - Create Form
-        mainElement.appendChild(
-            CutPieceCreateFormComponent(handleCutPieceAddFormSubmit).render()
-        );
-
-        // Uncut Pieces - Header
-        mainElement.appendChild(createElement('h2', {}, 'Uncut Pieces:'));
-        // Uncut Pieces - Clear Button
-        mainElement.appendChild(
-            createElement('div', {'class': 'clear-btn-container'})
-        ).appendChild(
-            createElement('button', {'class': 'clear-btn'}, 'Clear All Uncut Pieces')
-        ).addEventListener('click', handleUncutPieceListClear);
-        // Uncut Pieces - List
-        uncutPieceListComponent = UncutPieceListComponent();
-        mainElement.appendChild(uncutPieceListComponent.render());
-        // Uncut Pieces - Create Form
-        mainElement.appendChild(
-            UncutPieceCreateFormComponent(handleUncutPieceAddFormSubmit).render()
-        );
+        // Add cut/uncut pieces section
+        mainElement.appendChild(cutPieceSectionComponent.render());
+        mainElement.appendChild(uncutPieceSectionComponent.render());
 
         // Add any cut/uncut pieces passed as parameters
-        initCutPieces.forEach((cutPiece) => addCutPiece(cutPiece));
-        initUncutPieces.forEach((uncutPiece) => addUncutPiece(uncutPiece));
+        initCutPieces.forEach((cutPiece) => cutPieceSectionComponent.addCutPiece(cutPiece));
+        initUncutPieces.forEach((uncutPiece) => uncutPieceSectionComponent.addUncutPiece(uncutPiece));
 
         // Add button that creates cut list with click event listener
         const createCutListBtn = mainElement.appendChild(
@@ -94,134 +58,12 @@ const cutListCalculatorComponent = (() => {
         mainElement.appendChild(cutListComponent.render());
 
         // Add footer component, passing in the first year of the app
-        document.body.appendChild(Footer(2023).render());
-    }
-
-    function addCutPiece(cutPiece) {
-        cutPieceListComponent.addCutPieceComponent(
-            CutPieceComponent(cutPiece, handleCutPieceEditClick, handleCutPieceDeleteClick)
-        );
-
-        return cutPiece;
-    }
-
-    function addUncutPiece(uncutPiece) {
-        uncutPieceListComponent.addUncutPieceComponent(
-            UncutPieceComponent(uncutPiece, handleUncutPieceEditClick, handleUncutPieceDeleteClick)
-        );
-
-        return uncutPiece;
-    }
-
-    function removeCutPiece(cutPieceToRemove) {
-        cutPieceListComponent.removeCutPiece(cutPieceToRemove);
-    }
-
-    function removeUncutPiece(uncutPieceToRemove) {
-        uncutPieceListComponent.removeUncutPiece(uncutPieceToRemove);
-    }
-
-    function handleCutPieceAddFormSubmit(e) {
-        e.preventDefault();
-
-        // Create CutPiece from form inputs
-        const cutPiece = new CutPiece(
-            Number(e.target.elements.namedItem('thickness').value),
-            Number(e.target.elements.namedItem('width').value),
-            Number(e.target.elements.namedItem('length').value),
-            Number(e.target.elements.namedItem('quantity').value),
-            Number(e.target.elements.namedItem('kerf').value)
-        );
-        
-        addCutPiece(cutPiece);
-    }
-
-    function handleUncutPieceAddFormSubmit(e) {
-        e.preventDefault();
-
-        // Create UncutPiece from form inputs
-        const uncutPiece = new UncutPiece(
-            Number(e.target.elements.namedItem('thickness').value), 
-            Number(e.target.elements.namedItem('width').value),
-            Number(e.target.elements.namedItem('length').value),
-            Number(e.target.elements.namedItem('price').value),
-        );
-        
-        addUncutPiece(uncutPiece);
-    }
-
-    function handleCutPieceEditClick(e, oldCutPiece) {
-        // Create a new CutPiece from form input values
-        const newCutPiece = new CutPiece(
-            Number(e.target.elements.namedItem('thickness').value),
-            Number(e.target.elements.namedItem('width').value),
-            Number(e.target.elements.namedItem('length').value),
-            Number(e.target.elements.namedItem('quantity').value),
-            Number(e.target.elements.namedItem('kerf').value)
-        );
-        
-        // Check that new CutPiece is not a duplicate thickness x width x length combo
-        cutPieceListComponent.getPieces().forEach((cutPiece) => {
-            if (cutPiece !== oldCutPiece && cutPiece === newCutPiece) {
-                return;
-            }
-        });
-
-        // If reach here, new CutPiece is valid
-    }
-
-    function handleUncutPieceEditClick(e, oldUncutPiece) {
-        // Create a new UncutPiece from form input values
-        const newUncutPiece = new CutPiece(
-            Number(e.target.elements.namedItem('thickness').value),
-            Number(e.target.elements.namedItem('width').value),
-            Number(e.target.elements.namedItem('length').value),
-            Number(e.target.elements.namedItem('price').value),
-        );
-        
-        // Check that new UncutPiece is not a duplicate thickness x width x length combo
-        uncutPieceListComponent.getPieces().forEach((uncutPiece) => {
-            if (uncutPiece !== oldUncutPiece && uncutPiece === newUncutPiece) {
-                return;
-            }
-        });
-
-        // If reach here, new CutPiece is valid
-    }
-
-    function handleCutPieceDeleteClick(cutPieceToDelete) {
-        document.body.prepend(
-            ConfirmModalComponent(() => {
-                handleCutPieceDeleteConfirm(cutPieceToDelete)
-            },
-            'Are you sure you want to delete the cut piece?'
-            ).render()
-        );
-    }
-
-    function handleCutPieceDeleteConfirm(cutPieceToDelete) {
-        console.log('Delete cut piece ' + cutPieceToDelete);
-        removeCutPiece(cutPieceToDelete);
-    }
-
-    function handleUncutPieceDeleteClick(uncutPieceToDelete) {
-        document.body.prepend(
-            ConfirmModalComponent(() => {
-                handleUncutPieceDeleteConfirm(uncutPieceToDelete)
-            },
-            'Are you sure you want to delete the uncut piece?'
-            ).render()
-        );
-    }
-
-    function handleUncutPieceDeleteConfirm(uncutPieceToDelete) {
-        console.log('Delete uncut piece ' + uncutPieceToDelete);
-        removeUncutPiece(uncutPieceToDelete);
+        document.body.appendChild(FooterComponent(2023).render());
     }
     
     function handleCreateCutListClick() {
-        const cutPieces = cutPieceListComponent.getPieces();
-        const uncutPieces = uncutPieceListComponent.getPieces();
+        const cutPieces = cutPieceSectionComponent.getCutPieces();
+        const uncutPieces = uncutPieceSectionComponent.getUncutPieces();
 
         if (!cutPieces.length) {
             // No cutpieces
@@ -239,25 +81,15 @@ const cutListCalculatorComponent = (() => {
         clearCutListError();
 
         bestCutList = cutListCalculator.getCheapestCutList(
-            cutPieceListComponent.getPieces(), 
-            uncutPieceListComponent.getPieces()
+            cutPieces, 
+            uncutPieces
         );
+        // bestCutList = cutListCalculator.getCheapestCutList(
+        //     cutPieceListComponent.getPieces(), 
+        //     uncutPieceListComponent.getPieces()
+        // );
 
         cutListComponent.cutList = bestCutList;
-    }
-
-    function handleCutPieceListClear() {
-        console.log('Clear Cut List');
-
-        // Clear cut pieces displayed
-        cutPieceListComponent.clear();
-    }
-
-    function handleUncutPieceListClear() {
-        console.log('Clear Uncut List');
-
-        // Clear uncut pieces displayed
-        uncutPieceListComponent.clear();
     }
 
     function showCutListError(errorMsg) {
