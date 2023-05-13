@@ -46,10 +46,14 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
 
     const render = function() {
         if (element === undefined) {
-            element = createElement('div', {'class': 'uncut-piece'});
+            element = createElement('div', {'class': 'uncut-piece-inst-container'});
         } else {
             clearElement();
         }
+
+        const uncutPieceInstElement = element.appendChild(
+            createElement('div', {'class': 'uncut-piece'})
+        );
 
         const editBtn = createElement('button', {}, 'Edit');
         const deleteBtn = createElement('button', {}, 'Delete');
@@ -58,7 +62,7 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
         editBtn.addEventListener('click', handleEditClick);
         deleteBtn.addEventListener('click', handleDeleteClick);
 
-        element.append(
+        uncutPieceInstElement.append(
             createElement('div', {}, uncutPiece.thickness),
             createElement('div', {}, uncutPiece.width),
             createElement('div', {}, uncutPiece.length),

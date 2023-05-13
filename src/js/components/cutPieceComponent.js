@@ -47,10 +47,14 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
 
     const render = function() {
         if (element === undefined) {
-            element = createElement('div', {'class': 'cut-piece'});
+            element = createElement('div', {'class': 'cut-piece-inst-container'});
         } else {
             clearElement();
         }
+
+        const cutPieceInstElement = element.appendChild(
+            createElement('div', {'class': 'cut-piece'})
+        );
         
         const editBtn = createElement('button', {}, 'Edit');
         const deleteBtn = createElement('button', {}, 'Delete');
@@ -59,7 +63,7 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
         editBtn.addEventListener('click', handleEditClick);
         deleteBtn.addEventListener('click', handleDeleteClick);
 
-        element.append(
+        cutPieceInstElement.append(
             createElement('div', {}, cutPiece.thickness),
             createElement('div', {}, cutPiece.width),
             createElement('div', {}, cutPiece.length),
