@@ -5,6 +5,7 @@ import CutPiece from './js/cutPiece.js';
 import {CrossSection, UncutPiece} from './js/uncutPiece.js';
 import {cutList} from './js/cutList.js';
 import cutListCalculatorComponent from './js/components/cutListCalculatorComponent.js';
+import { init1, init2, init3 } from './js/saveHTMLAsPDF.js';
 
 (() => {
     function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {
@@ -156,4 +157,7 @@ import cutListCalculatorComponent from './js/components/cutListCalculatorCompone
     //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     window.cutListCalculator = cutListCalculator;
+    //init1();
+    //init2();
+    init3();
 })();

@@ -16,8 +16,11 @@
     --base-white: hsl(0, 0%, 95%);
     --base-black: hsl(0, 0%, 10%);
 
-    --primary: #96642c;
-    --secondary: orange;
+    --primary-bg: #96642c;
+    --secondary-bg: orange;
+
+    --primary-bg-text: var(--base-white, white);
+    --secondary-bg-text: var(--base-white, white);
 
     --hover: hsl(0, 0%, 50%);
     --active: hsl(0, 0%, 25%);
@@ -69,6 +72,8 @@ footer {
 
 header {
     grid-area: header;
+    background-color: var(--primary-bg);
+    color: var(--primary-bg-text, white);
 }
 
 // Main Content
@@ -86,6 +91,8 @@ footer {
     grid-area: footer;
     display: grid;
     place-items: center;
+    background-color: var(--primary-bg);
+    color: var(--primary-bg-text, white);
 }
 
 // Custom IDs
@@ -170,7 +177,7 @@ footer {
 
 .piece-section {
     @include customBoxShadow();
-    border: 2px solid var(--base-black, black);
+    border: 2px solid var(--primary-bg, black);
     padding: 1em;
     display: grid;
     grid-gap: 1em;
@@ -178,7 +185,7 @@ footer {
 
 .piece-form, 
 .piece-list {
-    border: 2px solid var(--base-black, black);
+    border: 2px solid var(--primary-bg, black);
 }
 
 .piece-form {
@@ -196,13 +203,11 @@ footer {
 
     .piece-form-btn-container {
         display: grid;
-        justify-content: center;
+        grid-auto-flow: column;
     }
 }
 
 .piece-list {
-    // border: 2px solid var(--base-black, black);
-
     .piece-list-head, 
     .piece-list-body .cut-piece,
     .piece-list-body .uncut-piece {
@@ -211,13 +216,13 @@ footer {
 }
 
 .piece-list-body {
-    .cut-piece:nth-child(odd),
-    .uncut-piece:nth-child(odd) {
+    .cut-piece-inst-container:nth-child(odd),
+    .uncut-piece-inst-container:nth-child(odd) {
         background-color: hsl(0, 0%, 85%);
     }
 
-    .cut-piece:nth-child(even),
-    .uncut-piece:nth-child(even) {
+    .cut-piece-inst-container:nth-child(even),
+    .uncut-piece-inst-container:nth-child(even) {
         background-color: hsl(0, 0%, 75%);
     }
 }
@@ -267,7 +272,8 @@ table {
 
 button, input[type=submit] {
     appearance: none;
-    border: 1px solid var(--base-black, black);
+    border: 1px solid var(--primary-bg, black);
+    color: var(--primary-bg, inherit);
     text-decoration: none;
     cursor: pointer;
 
@@ -278,5 +284,10 @@ button, input[type=submit] {
 
     &:active {
         background-color: var(--active, hsl(0, 0%, 25%));
+    }
+
+    &:hover, &:active {
+        background-color: var(--primary-bg, inherit);
+        color: var(--primary-bg-text, inherit);
     }
 }
