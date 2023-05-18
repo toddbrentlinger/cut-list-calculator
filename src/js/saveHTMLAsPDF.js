@@ -10,16 +10,12 @@ export function init1() {
     doc.save("a4.pdf");
 }
 
-export function init2() {
-    const btn = document.body.querySelector('main')
-        .appendChild(createElement('button', {}, 'Save as PDF'));
-
-    btn.addEventListener('click', demoFromHTML);
-}
-
 export function init3() {
     // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
+    const doc = new jsPDF({
+        unit: 'pt',
+        format: 'letter',
+    });
 
     const btn = document.body.querySelector('main')
         .appendChild(createElement('button', {}, 'Save as PDF'));
@@ -28,9 +24,26 @@ export function init3() {
         doc.html(document.getElementById('cut-list'), {
             callback: function(doc) {
                 doc.save();
-            }
+            },
+            filename: 'cut-list.pdf',
+            margin: [72, 72, 72, 72], // [72, 72, 72, 72]
+            autoPaging: 'text',
+            html2canvas: {
+                allowTaint: true,
+                dpi: 300,
+                letterRendering: true,
+                logging: false,
+                scale: .8
+            },
         });
     });
+}
+
+export function initDemotFromHTML() {
+    const btn = document.body.querySelector('main')
+        .appendChild(createElement('button', {}, 'Save as PDF'));
+
+    btn.addEventListener('click', demoFromHTML);
 }
 
 export function demoFromHTML() {

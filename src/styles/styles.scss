@@ -72,8 +72,6 @@ footer {
 
 header {
     grid-area: header;
-    background-color: var(--primary-bg);
-    color: var(--primary-bg-text, white);
 }
 
 // Main Content
@@ -91,6 +89,11 @@ footer {
     grid-area: footer;
     display: grid;
     place-items: center;
+}
+
+header, footer {
+    background-image: url("../images/wood_pattern.svg");
+    background-size: contain;
     background-color: var(--primary-bg);
     color: var(--primary-bg-text, white);
 }
