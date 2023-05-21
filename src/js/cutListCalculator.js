@@ -175,6 +175,26 @@ const cutListCalculator = (() => {
         return index;
     }
 
+    /**
+     * Finds cheapest cut lists with CutPieces and UncutPieces of different dimensions
+     * @param {[CutPiece]} cutPieces 
+     * @param {[UncutPiece]} uncutPieces
+     * @returns
+     */
+    function getCutList(cutPieces, uncutPieces) {
+        // Sort matching dimensions of CutPieces and UncutPieces together
+
+        // Find cheapest cut list for each dimension
+
+        // Return array of cheapest cut lists for each dimension
+    }
+
+    /**
+     * Finds cheapest CutList with CutPieces and UncutPieces of the same dimension
+     * @param {[CutPiece]} cutPieces Array of cutPieces with same dimension
+     * @param {[UncutPiece]} uncutPieces Array of uncutPieces with matching dimension of cutPieces
+     * @returns {CutList}
+     */
     function getCheapestCutList(cutPieces, uncutPieces) {
         // Check for empty pieces
         if (!cutPieces.length || !uncutPieces) {

@@ -4,7 +4,7 @@ import cutListCalculator from './js/cutListCalculator.js';
 import CutPiece from './js/cutPiece.js';
 import {CrossSection, UncutPiece} from './js/uncutPiece.js';
 import {cutList} from './js/cutList.js';
-import cutListCalculatorComponent from './js/components/cutListCalculatorComponent.js';
+import cutListCalculatorComponent from './js/cutListCalculatorComponent.js';
 import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
 
 (() => {

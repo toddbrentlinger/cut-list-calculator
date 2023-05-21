@@ -1,13 +1,13 @@
-import FooterComponent from "./footerComponent.js";
+import FooterComponent from "./components/footerComponent.js";
 
-import CutPieceSectionComponent from "./cutPieceSectionComponent.js";
-import UncutPieceSectionComponent from "./uncutPieceSectionComponent.js";
+import CutPieceSectionComponent from "./components/cutPieceSectionComponent.js";
+import UncutPieceSectionComponent from "./components/uncutPieceSectionComponent.js";
 
-import CutListComponent from "./cutListComponent.js";
+import CutListComponent from "./components/cutListComponent.js";
 
-import cutListCalculator from "../cutListCalculator.js";
+import cutListCalculator from "./cutListCalculator.js";
 
-import { createElement } from "../utilities.js";
+import { createElement } from "./utilities.js";
 
 const cutListCalculatorComponent = (() => {
     const cutPieceSectionComponent = CutPieceSectionComponent();
@@ -21,11 +21,16 @@ const cutListCalculatorComponent = (() => {
     function init(initCutPieces = [], initUncutPieces = [], initBestCutList = undefined) {
         bestCutList = initBestCutList;
 
-        let mainElement = document.querySelector('main');
-        if (mainElement === null) {
-            mainElement = document.createElement('main');
-            document.body.appendChild(mainElement);
-        }
+        // Header with title
+        document.body.appendChild(
+            createElement('header', {}, 
+                createElement('h1', {}, 'Cut List Calculator')
+            )
+        );
+
+        // Main element
+        let mainElement = document.createElement('main');
+        document.body.appendChild(mainElement);
 
         // Description
         mainElement.appendChild(createElement('p', {}, 
