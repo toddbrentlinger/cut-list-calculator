@@ -182,11 +182,63 @@ const cutListCalculator = (() => {
      * @returns
      */
     function getCutList(cutPieces, uncutPieces) {
+        /**
+         * Example of pieces object:
+         * {
+         *   2: {
+         *     4: {
+         *       cut: [],   -> 2x4 cutPieces
+         *       uncut: [], -> 2x4 uncutPieces
+         *     },
+         *   },
+         *   4: {
+         *     4: {
+         *       cut: [],   -> 4x4 cutPieces
+         *       uncut: [], -> 4x4 uncutPieces
+         *     },
+         *   },
+         * }
+         */
+        const pieces = {};
+        const cutLists = [];
+
         // Sort matching dimensions of CutPieces and UncutPieces together
 
+        cutPieces.forEach((cutPiece) => {
+            if (!(cutPiece.thickness in pieces)) {
+                pieces[cutPiece.thickness] = {};
+            }
+
+            if (!(cutPiece.width in pieces[cutPiece.thickness])) {
+                pieces[cutPiece.thickness][cutPiece.width] = {cut: [], uncut: []};
+            }
+
+            pieces[cutPiece.thickness][cutPiece.width].cut.push(cutPiece);
+        });
+
+        uncutPieces.forEach((uncutPiece) => {
+            if (!(uncutPiece.thickness in pieces)) {
+                pieces[uncutPiece.thickness] = {};
+            }
+
+            if (!(uncutPiece.width in pieces[uncutPiece.thickness])) {
+                pieces[uncutPiece.thickness][uncutPiece.width] = {cut: [], uncut: []};
+            }
+
+            pieces[uncutPiece.thickness][uncutPiece.width].uncut.push(uncutPiece);
+        });
+
         // Find cheapest cut list for each dimension
+        Object.values(pieces).forEach((pieceThicknessObj) => {
+            Object.values(pieceThicknessObj).forEach((pieceObj) => {
+                cutLists.push(
+                    getCheapestCutList(pieceObj.cut, pieceObj.uncut)
+                );
+            });
+        });
 
         // Return array of cheapest cut lists for each dimension
+        return cutLists;
     }
 
     /**
