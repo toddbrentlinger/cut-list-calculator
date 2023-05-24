@@ -68,7 +68,7 @@ export default function CutPieceCreateFormComponent(handleFormSubmit) {
         // Form - Form Submit Container
         formElement.appendChild(
             createElement('div', {'class': 'piece-form-btn-container'}, 
-                createElement('input', {'type': 'submit', 'value': 'Add'})
+                createElement('input', {'type': 'submit', 'value': 'Add Cut Piece'})
             )
         );
 

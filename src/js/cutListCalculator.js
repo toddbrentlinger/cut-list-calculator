@@ -181,7 +181,7 @@ const cutListCalculator = (() => {
      * @param {[UncutPiece]} uncutPieces
      * @returns
      */
-    function getCutList(cutPieces, uncutPieces) {
+    function getCutLists(cutPieces, uncutPieces) {
         /**
          * Example of pieces object:
          * {
@@ -408,6 +408,7 @@ const cutListCalculator = (() => {
 
     return {
         getCheapestCutList,
+        getCutLists,
     };
 })();
 

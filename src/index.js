@@ -78,8 +78,7 @@ import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
         new CutPiece(2, 4, 39.875, 3),
         new CutPiece(2, 4, 49.875, 3),
     ];
-
-    const crossSection2x4 = new CrossSection(2,4);
+    
     let uncutPieces = [
         new UncutPiece(2, 4, 48, 275),
         new UncutPiece(2, 4, 96, 298),
@@ -100,7 +99,6 @@ import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
         new CutPiece(4, 4, 22.5, 4),
     ];
 
-    const crossSection4x4 = new CrossSection(4,4);
     uncutPieces = [
         new UncutPiece(4, 4, 72, 12.28),
         new UncutPiece(4, 4, 96, 15.48),
@@ -155,6 +153,36 @@ import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
     // ISSUE: Very long time
     //debugger;
     //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+
+    // ------------------------------------------------------------------------
+
+    console.log('Different dimensions');
+
+    cutPieces = [
+        new CutPiece(2, 4, 36, 4),
+        new CutPiece(2, 4, 32+1/8, 8),
+        new CutPiece(2, 4, 34, 2),
+        new CutPiece(4, 4, 36, 2),
+        new CutPiece(4, 4, 35+5/16, 2),
+        new CutPiece(4, 4, 30+21/32, 2),
+        new CutPiece(4, 4, 22.5, 4),
+    ];
+
+    uncutPieces = [
+        new UncutPiece(4, 4, 72, 12.28),
+        new UncutPiece(4, 4, 96, 15.48),
+        new UncutPiece(4, 4, 120, 22.38),
+        new UncutPiece(4, 4, 144, 27.48),
+        new UncutPiece(2, 4, 48, 275),
+        new UncutPiece(2, 4, 96, 298),
+        new UncutPiece(2, 4, 120, 386),
+        new UncutPiece(2, 4, 144, 462),
+    ];
+
+    let cutLists = cutListCalculator.getCutLists(cutPieces, uncutPieces);
+    console.log(cutLists);
+
+    // ------------------------------------------------------------------------
 
     window.cutListCalculator = cutListCalculator;
     //init1();

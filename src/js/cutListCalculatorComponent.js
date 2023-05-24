@@ -89,10 +89,6 @@ const cutListCalculatorComponent = (() => {
             cutPieces, 
             uncutPieces
         );
-        // bestCutList = cutListCalculator.getCheapestCutList(
-        //     cutPieceListComponent.getPieces(), 
-        //     uncutPieceListComponent.getPieces()
-        // );
 
         cutListComponent.cutList = bestCutList;
     }
