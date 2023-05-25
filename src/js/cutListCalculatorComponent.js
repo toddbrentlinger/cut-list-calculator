@@ -85,12 +85,12 @@ const cutListCalculatorComponent = (() => {
         // If reach here, no errors to show. Remove any previous errors.
         clearCutListError();
 
-        bestCutList = cutListCalculator.getCheapestCutList(
-            cutPieces, 
+        bestCutList = cutListCalculator.getCutLists(
+            cutPieces,
             uncutPieces
         );
 
-        cutListComponent.cutList = bestCutList;
+        cutListComponent.cutLists = bestCutList;
     }
 
     function showCutListError(errorMsg) {

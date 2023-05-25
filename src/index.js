@@ -108,7 +108,7 @@ import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
     
     cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
-    cutListCalculatorComponent.init(cutPieces, uncutPieces);
+    //cutListCalculatorComponent.init(cutPieces, uncutPieces);
     window.cutListCalculatorComponent = cutListCalculatorComponent;
 
     // ------------------------------------------------------------------------
@@ -173,14 +173,15 @@ import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
         new UncutPiece(4, 4, 96, 15.48),
         new UncutPiece(4, 4, 120, 22.38),
         new UncutPiece(4, 4, 144, 27.48),
-        new UncutPiece(2, 4, 48, 275),
-        new UncutPiece(2, 4, 96, 298),
-        new UncutPiece(2, 4, 120, 386),
-        new UncutPiece(2, 4, 144, 462),
+        new UncutPiece(2, 4, 48, 2.75),
+        new UncutPiece(2, 4, 96, 2.98),
+        new UncutPiece(2, 4, 120, 3.86),
+        new UncutPiece(2, 4, 144, 4.62),
     ];
 
     let cutLists = cutListCalculator.getCutLists(cutPieces, uncutPieces);
     console.log(cutLists);
+    cutListCalculatorComponent.init(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
 

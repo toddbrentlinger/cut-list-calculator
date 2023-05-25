@@ -1,7 +1,7 @@
 import { createElement } from "../utilities.js";
 import CutSequenceComponent from "./cutSequenceComponent.js";
 
-export default function CutListComponent(cutList) {
+export default function CutListComponent(cutLists = []) {
     let element;
 
     const clear = function() {
@@ -17,7 +17,7 @@ export default function CutListComponent(cutList) {
             element = createElement('div', {'id': 'cut-list'});
         }
 
-        if (cutList === undefined) {
+        if (!cutLists.length) {
             return element;
         }
         
@@ -38,20 +38,24 @@ export default function CutListComponent(cutList) {
         ));
 
         // Material List - Table Body
-        const materialList = cutList.getMaterialList();
+        const materialListsArr = cutLists.map((cutList) => cutList.getMaterialList());
+        //const materialList = cutList.getMaterialList();
         const materialListTableBody = materialListTable.appendChild(document.createElement('tbody'));
         let totalPrice = 0;
         let currPrice;
-        for (const [uncutLength, uncutObj] of Object.entries(materialList)) {
-            currPrice = uncutObj.quantity * uncutObj.unitPrice;
-            materialListTableBody.appendChild(createElement('tr', {}, 
-                createElement('td', {}, uncutObj.quantity),
-                createElement('td', {}, uncutLength),
-                createElement('td', {}, uncutObj.unitPrice),
-                createElement('td', {}, currPrice.toFixed(2))
-            ));
-            totalPrice += currPrice;
-        }
+
+        materialListsArr.forEach((materialList) => {
+            for (const [uncutLength, uncutObj] of Object.entries(materialList)) {
+                currPrice = uncutObj.quantity * uncutObj.unitPrice;
+                materialListTableBody.appendChild(createElement('tr', {}, 
+                    createElement('td', {}, uncutObj.quantity),
+                    createElement('td', {}, uncutLength),
+                    createElement('td', {}, uncutObj.unitPrice),
+                    createElement('td', {}, currPrice.toFixed(2))
+                ));
+                totalPrice += currPrice;
+            }
+        });
 
         // Material List - Table Body - Total Price
         materialListTable.appendChild(createElement('tr', {}, 
@@ -77,8 +81,10 @@ export default function CutListComponent(cutList) {
 
         // Material List - Table Body
         const cutSequencesTableBody = cutSequencesTable.appendChild(document.createElement('tbody'));
-        cutList.cutSequences.forEach((cutSequence) => {
-            cutSequencesTableBody.append(...CutSequenceComponent(cutSequence).render());
+        cutLists.forEach((cutList) => {
+            cutList.cutSequences.forEach((cutSequence) => {
+                cutSequencesTableBody.append(...CutSequenceComponent(cutSequence).render());
+            });
         });
         
         return element;
@@ -86,9 +92,9 @@ export default function CutListComponent(cutList) {
 
     return {
         render,
-        get cutList() { return cutList; },
-        set cutList(newCutList) { 
-            cutList = newCutList;
+        get cutLists() { return cutLists; },
+        set cutLists(newCutLists) { 
+            cutLists = newCutLists;
             clear();
             render();
             element.scrollIntoView();
