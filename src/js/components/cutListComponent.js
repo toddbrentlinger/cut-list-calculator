@@ -31,6 +31,7 @@ export default function CutListComponent(cutLists = []) {
         materialListTable.appendChild(createElement('thead', {}, 
             createElement('tr', {}, 
                 createElement('th', {'scope': 'col'}, 'Quantity'),
+                createElement('th', {'scope': 'col'}, 'Dimension'),
                 createElement('th', {'scope': 'col'}, 'Uncut Length'),
                 createElement('th', {'scope': 'col'}, 'Unit Price'),
                 createElement('th', {'scope': 'col'}, 'Sum Price')
@@ -49,6 +50,7 @@ export default function CutListComponent(cutLists = []) {
                 currPrice = uncutObj.quantity * uncutObj.unitPrice;
                 materialListTableBody.appendChild(createElement('tr', {}, 
                     createElement('td', {}, uncutObj.quantity),
+                    createElement('td', {}, uncutObj.crossSection),
                     createElement('td', {}, uncutLength),
                     createElement('td', {}, uncutObj.unitPrice),
                     createElement('td', {}, currPrice.toFixed(2))
@@ -59,7 +61,7 @@ export default function CutListComponent(cutLists = []) {
 
         // Material List - Table Body - Total Price
         materialListTable.appendChild(createElement('tr', {}, 
-            createElement('td', {'colspan': '2'}),
+            createElement('td', {'colspan': '3'}),
             createElement('th', {'scope': 'row'}, 'Total Price'),
             createElement('td', {}, totalPrice.toFixed(2))
         ));

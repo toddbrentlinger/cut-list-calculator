@@ -116,6 +116,11 @@ header, footer {
     }
 }
 
+#cut-list {
+    display: grid;
+    grid-gap: 1rem;
+}
+
 // Custom Classes
 
 .cut-sequence {

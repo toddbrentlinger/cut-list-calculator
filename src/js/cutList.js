@@ -31,6 +31,7 @@ export class CutList {
                 materialListObj[cutSequence.uncutPiece.length].quantity++;
             } else {
                 materialListObj[cutSequence.uncutPiece.length] = {
+                    crossSection: `${cutSequence.uncutPiece.thickness}x${cutSequence.uncutPiece.width}`,
                     unitPrice: cutSequence.uncutPiece.price,
                     quantity: 1,
                 };
