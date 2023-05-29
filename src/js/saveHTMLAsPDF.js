@@ -13,27 +13,40 @@ export function init1() {
 export function init3() {
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF({
-        unit: 'pt',
+        orientation: 'landscape',
+        unit: 'mm',
         format: 'letter',
     });
 
     const btn = document.body.querySelector('main')
         .appendChild(createElement('button', {}, 'Save as PDF'));
 
+    const margin = 0;
+    const pageWidth = 280;
+
     btn.addEventListener('click', () => {
         doc.html(document.getElementById('cut-list'), {
             callback: function(doc) {
-                doc.save();
+                //debugger;
+                doc.save('cut-list.pdf');
             },
-            filename: 'cut-list.pdf',
-            margin: [72, 72, 72, 72], // [72, 72, 72, 72]
-            autoPaging: 'text',
+            margin: margin,
+            //autoPaging: 'text',
+            width: pageWidth - 2 *margin, // target width
+            windowWidth: pageWidth - 2 * margin, // window width
             html2canvas: {
-                allowTaint: true,
-                dpi: 300,
-                letterRendering: true,
+                onclone: (doc) => {
+                    //debugger;
+                },
+                //allowTaint: true,
                 logging: false,
-                scale: .8
+                //scale: .8,
+                // width: 100, // width of canvas
+                // height: 100, // height of canvas
+                // x: 50, // crop canvas-x coord
+                // y: 50, // crop canvas-y coord
+                // windowWidth: 300,
+                // windowHeight: 300, 
             },
         });
     });
