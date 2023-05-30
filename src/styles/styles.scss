@@ -2,7 +2,8 @@
 
 @mixin baseGrid($nColumns: 6) {
     display: grid;
-    grid-template-columns: repeat($nColumns, 1fr);
+    //grid-template-columns: repeat($nColumns, minmax(0, 1fr));
+    grid-template-columns: minmax(5em, 1fr) repeat(5, minmax(0, 1fr));
     column-gap: 1rem;
     justify-items: center;
     align-items: center;
@@ -17,7 +18,8 @@
     --base-black: hsl(0, 0%, 10%);
 
     --primary-bg: #7b5225;
-    --secondary-bg: #BD5E15;
+    --secondary-bg: #C77A28;
+    --tertiary-bg: #C78D50;
 
     --primary-bg-text: var(--base-white, white);
     --secondary-bg-text: var(--base-white, white);
@@ -78,8 +80,16 @@ header {
 
 main {
     grid-area: main;
-    display: grid;
-    grid-gap: 1em;
+    // display: grid;
+    // grid-gap: 1em;
+
+    > * {
+        margin-bottom: 1em;
+    }
+
+    > *:last-child {
+        margin-bottom: 0;
+    }
 }
 
 // Footer
@@ -101,9 +111,11 @@ header, footer {
 // Custom IDs
 
 #create-cut-list-btn-container,
-.clear-btn-container {
-    display: grid;
-    justify-content: center;
+.clear-btn-container,
+#save-as-pdf-btn-container {
+    button {
+        width: 100%;
+    }
 }
 
 #create-cut-list-error-msg {
@@ -119,6 +131,10 @@ header, footer {
 #cut-list {
     display: grid;
     grid-gap: 1rem;
+
+    &.hide {
+        display: none;
+    }
 }
 
 // Custom Classes

@@ -5,7 +5,6 @@ import CutPiece from './js/cutPiece.js';
 import {CrossSection, UncutPiece} from './js/uncutPiece.js';
 import {cutList} from './js/cutList.js';
 import cutListCalculatorComponent from './js/cutListCalculatorComponent.js';
-import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
 
 (() => {
     function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {

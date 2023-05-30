@@ -47,7 +47,7 @@ const cutListCalculatorComponent = (() => {
 
         // Add button that creates cut list with click event listener
         const createCutListBtn = mainElement.appendChild(
-            createElement('div', {'id': 'create-cut-list-btn-container'})
+            createElement('div', {'id': 'create-cut-list-btn-container', 'class': 'btn-large-container'})
         ).appendChild(
             createElement('button', {'id': 'create-cut-list-btn'}, 'Create Cut List')
         );
@@ -85,12 +85,22 @@ const cutListCalculatorComponent = (() => {
         // If reach here, no errors to show. Remove any previous errors.
         clearCutListError();
 
+        // Add/show progress element
+
         bestCutList = cutListCalculator.getCutLists(
             cutPieces,
-            uncutPieces
+            uncutPieces,
+            updateCutListProgress
         );
 
+        // Remove/hide progress element
+        // TODO
+
         cutListComponent.cutLists = bestCutList;
+    }
+
+    function updateCutListProgress(progressPercent) {
+        console.log(`Component: ${progressPercent}`);
     }
 
     function showCutListError(errorMsg) {
