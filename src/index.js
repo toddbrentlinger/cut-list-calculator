@@ -186,7 +186,4 @@ import { init1, init3, initDemotFromHTML } from './js/saveHTMLAsPDF.js';
     // ------------------------------------------------------------------------
 
     window.cutListCalculator = cutListCalculator;
-    //init1();
-    init3();
-    //initDemotFromHTML();
 })();

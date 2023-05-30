@@ -1,5 +1,6 @@
 import { createElement } from "../utilities.js";
 import CutSequenceComponent from "./cutSequenceComponent.js";
+import jsPDF from "jspdf";
 
 export default function CutListComponent(cutLists = []) {
     let element;
@@ -12,14 +13,54 @@ export default function CutListComponent(cutLists = []) {
         }
     }
 
+    const saveCutListAsPDF = function() {
+        // Default export is a4 paper, portrait, using millimeters for units
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'letter',
+        });
+
+        const margin = 0;
+        const pageWidth = 280;
+
+        doc.html(document.getElementById('cut-list'), {
+            callback: function(doc) {
+                //debugger;
+                doc.save('cut-list.pdf');
+            },
+            margin: margin,
+            //autoPaging: 'text',
+            width: pageWidth - 2 *margin, // target width
+            windowWidth: pageWidth - 2 * margin, // window width
+            html2canvas: {
+                onclone: (doc) => {
+                    //debugger;
+                },
+                //allowTaint: true,
+                logging: false,
+                scale: .5,
+                // width: 100, // width of canvas
+                // height: 100, // height of canvas
+                // x: 50, // crop canvas-x coord
+                // y: 50, // crop canvas-y coord
+                // windowWidth: 300,
+                // windowHeight: 300, 
+            },
+        });
+    };
+
     const render = function() {
         if (element === undefined) {
             element = createElement('div', {'id': 'cut-list'});
         }
 
         if (!cutLists.length) {
+            element.classList.add('hide');
             return element;
         }
+
+        element.classList.remove('hide');
         
         // Material List - Header
         element.appendChild(createElement('h3', {}, 'Material List:'));
@@ -88,6 +129,15 @@ export default function CutListComponent(cutLists = []) {
                 cutSequencesTableBody.append(...CutSequenceComponent(cutSequence).render());
             });
         });
+
+        // Save as PDF button
+        const btn = element.appendChild(
+            createElement('div', {'id': 'save-as-pdf-btn-container'})
+        ).appendChild(
+            createElement('button', {}, 'Save as PDF')
+        );
+
+        btn.addEventListener('click', saveCutListAsPDF);
         
         return element;
     }
