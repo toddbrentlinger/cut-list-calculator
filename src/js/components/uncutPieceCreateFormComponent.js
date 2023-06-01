@@ -58,7 +58,7 @@ export default function UncutPieceCreateFormComponent(handleFormSubmit) {
 
         // Form - Form Submit Container
         formElement.appendChild(
-            createElement('div', {'class': 'piece-form-btn-container'}, 
+            createElement('div', {'class': 'btn-large-container'}, 
                 createElement('input', {'type': 'submit', 'value': 'Add Uncut Piece'})
             )
         );

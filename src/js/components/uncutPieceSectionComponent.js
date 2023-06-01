@@ -90,9 +90,9 @@ export default function UncutPieceSectionComponent() {
         
         // Uncut Pieces - Clear Button
         element.appendChild(
-            createElement('div', {'class': 'clear-btn-container'})
+            createElement('div', {'class': 'btn-large-container'})
         ).appendChild(
-            createElement('button', {'class': 'clear-btn'}, 'Clear All Uncut Pieces')
+            createElement('button', {}, 'Clear All Uncut Pieces')
         ).addEventListener('click', handleUncutPieceListClear);
         
         // Uncut Pieces - List

@@ -55,8 +55,12 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
             createElement('div', {'class': 'uncut-piece'})
         );
 
-        const editBtn = createElement('button', {}, 'Edit');
-        const deleteBtn = createElement('button', {}, 'Delete');
+        const editBtn = createElement('button', {}, 
+            createElement('span', {'class': 'fa-solid fa-pen-to-square', 'aria-label': 'Edit'})
+        );
+        const deleteBtn = createElement('button', {}, 
+            createElement('span', {'class': 'fa-solid fa-trash-can', 'aria-label': 'Delete'})
+        );
 
         // Add event listeners for buttons
         editBtn.addEventListener('click', handleEditClick);

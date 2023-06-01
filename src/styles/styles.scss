@@ -110,14 +110,6 @@ header, footer {
 
 // Custom IDs
 
-#create-cut-list-btn-container,
-.clear-btn-container,
-#save-as-pdf-btn-container {
-    button {
-        width: 100%;
-    }
-}
-
 #create-cut-list-error-msg {
     display: grid;
     justify-items: center;
@@ -139,14 +131,21 @@ header, footer {
 
 // Custom Classes
 
+.btn-large-container {
+    button, input[type=submit] {
+        width: 100%;
+        padding: 0.5em 1em;
+    }
+}
+
 .cut-sequence {
     display: grid;
     grid-auto-flow: column;
-    border: 2px solid var(--base-black, black);
+    border: 2px solid var(--primary-bg, black);
     border-top: none;
 
     &:first-child {
-        border-top: 2px solid var(--base-black, black);
+        border-top: 2px solid var(--primary-bg, black);
     }
 }
 
@@ -199,6 +198,12 @@ header, footer {
     grid-gap: 1em;
 }
 
+.modal-content-btn-container {
+    button, input[type=submit] {
+        padding: 0.5em 1em;
+    }
+}
+
 .piece-section {
     @include customBoxShadow();
     border: 2px solid var(--primary-bg, black);
@@ -228,6 +233,10 @@ header, footer {
     .piece-form-btn-container {
         display: grid;
         grid-auto-flow: column;
+
+        button, input[type=submit] {
+            padding: 0.5em 1em;
+        }
     }
 }
 
@@ -275,7 +284,7 @@ table {
     table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
-    border: 2px solid var(--base-black, black);
+    border: 2px solid var(--primary-bg, black);
     text-align: center;
 
     tbody {

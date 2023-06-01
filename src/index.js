@@ -5,6 +5,8 @@ import CutPiece from './js/cutPiece.js';
 import {CrossSection, UncutPiece} from './js/uncutPiece.js';
 import {cutList} from './js/cutList.js';
 import cutListCalculatorComponent from './js/cutListCalculatorComponent.js';
+import '@fortawesome/fontawesome-free/js/fontawesome.min.js';
+import '@fortawesome/fontawesome-free/js/solid.min.js';
 
 (() => {
     function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {

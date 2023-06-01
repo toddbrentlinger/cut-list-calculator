@@ -97,9 +97,9 @@ export default function CutPieceSectionComponent() {
 
         // Piece Clear Button
         element.appendChild(
-            createElement('div', {'class': 'clear-btn-container'})
+            createElement('div', {'class': 'btn-large-container'})
         ).appendChild(
-            createElement('button', {'class': 'clear-btn'}, 'Clear All Cut Pieces')
+            createElement('button', {}, 'Clear All Cut Pieces')
         ).addEventListener('click', handleCutPieceListClear);
 
         // Pieces List

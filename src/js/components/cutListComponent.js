@@ -132,7 +132,7 @@ export default function CutListComponent(cutLists = []) {
 
         // Save as PDF button
         const btn = element.appendChild(
-            createElement('div', {'id': 'save-as-pdf-btn-container'})
+            createElement('div', {'id': 'save-as-pdf-btn-container', 'class': 'btn-large-container'})
         ).appendChild(
             createElement('button', {}, 'Save as PDF')
         );
