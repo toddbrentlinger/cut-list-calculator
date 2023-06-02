@@ -142,14 +142,19 @@ export default function CutListComponent(cutLists = []) {
         return element;
     }
 
+    const setCutLists = function(newCutLists) {
+        cutLists = newCutLists;
+        clear();
+        render();
+        
+        element.scrollIntoView();
+    };
+
     return {
         render,
         get cutLists() { return cutLists; },
         set cutLists(newCutLists) { 
-            cutLists = newCutLists;
-            clear();
-            render();
-            element.scrollIntoView();
+            setCutLists(newCutLists);
         },
     };
 }

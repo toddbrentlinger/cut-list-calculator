@@ -191,8 +191,7 @@ header, footer {
     align-content: space-evenly;
 }
 
-.modal-content-btn-container,
-.piece-btn-container {
+.modal-content-btn-container {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 1em;
@@ -201,6 +200,16 @@ header, footer {
 .modal-content-btn-container {
     button, input[type=submit] {
         padding: 0.5em 1em;
+    }
+}
+
+.piece-btn-container {
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2em, 1fr));
+
+    button {
+        padding: 0.5em;
     }
 }
 
