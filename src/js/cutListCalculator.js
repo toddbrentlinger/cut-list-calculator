@@ -1,4 +1,5 @@
 import { CutList } from "./cutList.js";
+import CutPiece from "./cutPiece.js";
 import CutSequence from "./cutSequence.js";
 
 /**
@@ -179,9 +180,10 @@ const cutListCalculator = (() => {
      * Finds cheapest cut lists with CutPieces and UncutPieces of different dimensions
      * @param {[CutPiece]} cutPieces 
      * @param {[UncutPiece]} uncutPieces
+     * @param {Function} progressCallback
      * @returns
      */
-    function getCutLists(cutPieces, uncutPieces) {
+    function getCutLists(cutPieces, uncutPieces, progressCallback = console.log) {
         /**
          * Example of pieces object:
          * {
@@ -205,6 +207,12 @@ const cutListCalculator = (() => {
         // Sort matching dimensions of CutPieces and UncutPieces together
 
         cutPieces.forEach((cutPiece) => {
+            // Getter cutWithKerf is NOT included if cutPiece passed to worker.
+            // Set prototype to CutPiece if NOT included.
+            if (cutPiece.cutWithKerf === undefined) {
+                Object.setPrototypeOf(cutPiece, CutPiece.prototype);
+            }
+
             if (!(cutPiece.thickness in pieces)) {
                 pieces[cutPiece.thickness] = {};
             }
@@ -232,7 +240,7 @@ const cutListCalculator = (() => {
         Object.values(pieces).forEach((pieceThicknessObj) => {
             Object.values(pieceThicknessObj).forEach((pieceObj) => {
                 cutLists.push(
-                    getCheapestCutList(pieceObj.cut, pieceObj.uncut)
+                    getCheapestCutList(pieceObj.cut, pieceObj.uncut, progressCallback)
                 );
             });
         });
@@ -245,9 +253,10 @@ const cutListCalculator = (() => {
      * Finds cheapest CutList with CutPieces and UncutPieces of the same dimension
      * @param {[CutPiece]} cutPieces Array of cutPieces with same dimension
      * @param {[UncutPiece]} uncutPieces Array of uncutPieces with matching dimension of cutPieces
+     * @param {Function} progressCallback
      * @returns {CutList}
      */
-    function getCheapestCutList(cutPieces, uncutPieces) {
+    function getCheapestCutList(cutPieces, uncutPieces, progressCallback = console.log) {
         // Check for empty pieces
         if (!cutPieces.length || !uncutPieces) {
             return;
@@ -257,9 +266,6 @@ const cutListCalculator = (() => {
 
         // Sort cutPieces by cut length in decreasing order
         cutPieces.sort((a,b) => b.length - a.length);
-
-        // Sort availableLengthsArr in decreasing order
-        //availableLengthsArr.sort((a,b) => b - a);
 
         // Sort uncutPieces in descending order of length
         uncutPieces.sort((a,b) => b.length - a.length);
@@ -326,15 +332,16 @@ const cutListCalculator = (() => {
         });
 
         let incrementTrigger, decrementTrigger, tempNumAvailableLengthsCounter, skipFlag;
+
         let percentFactorCounter = 1;
         let percentMultipleDisplay = 5;
+        let percentage = 0;
+
         do {
-            //debugger;
-            //console.log(numAvailableLengthsCounter);
-            let percentage = getPercentage(numAvailableLengthsCounter, maxNumAvailableLengths);
+            percentage = getPercentage(numAvailableLengthsCounter, maxNumAvailableLengths);
             
             if (percentage && percentage > (percentMultipleDisplay * percentFactorCounter)) {
-                console.log(`${percentage.toFixed(0)}%`);
+                progressCallback(percentage.toFixed(0));
                 percentFactorCounter++;
             }
 
@@ -401,7 +408,6 @@ const cutListCalculator = (() => {
         } while (incrementTrigger !== null);
 
         console.log(bestCutList);
-        window.bestCutList = bestCutList;
 
         return bestCutList;
     }

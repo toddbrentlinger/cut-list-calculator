@@ -8,6 +8,7 @@ import CutListComponent from "./components/cutListComponent.js";
 import cutListCalculator from "./cutListCalculator.js";
 
 import { createElement } from "./utilities.js";
+import { CutList } from "./cutList.js";
 
 const cutListCalculatorComponent = (() => {
     const cutPieceSectionComponent = CutPieceSectionComponent();
@@ -17,6 +18,7 @@ const cutListCalculatorComponent = (() => {
     
     let cutListComponent;
     let cutListErrorElement;
+    let cutListProgressElement;
 
     function init(initCutPieces = [], initUncutPieces = [], initBestCutList = undefined) {
         bestCutList = initBestCutList;
@@ -58,6 +60,11 @@ const cutListCalculatorComponent = (() => {
             createElement('div', {'id': 'create-cut-list-error-msg', 'class': 'hide'})
         );
 
+        // Add progress bar for cut list
+        cutListProgressElement = mainElement.appendChild(
+            createElement('div', {'id': 'cut-list-progress', 'class': 'hide'})
+        );
+
         // Add calculated cut list
         cutListComponent = CutListComponent();
         mainElement.appendChild(cutListComponent.render());
@@ -85,22 +92,45 @@ const cutListCalculatorComponent = (() => {
         // If reach here, no errors to show. Remove any previous errors.
         clearCutListError();
 
-        // Add/show progress element
+        // Temporary flag used before I can figure out how to implement Worker
+        const useWorkerFlag = true;
 
-        bestCutList = cutListCalculator.getCutLists(
-            cutPieces,
-            uncutPieces,
-            updateCutListProgress
-        );
+        if (useWorkerFlag && window.Worker) {
+            const cutListWorker = new Worker(
+                './worker.bundle.js'
+            );
 
-        // Remove/hide progress element
-        // TODO
+            console.log('Message sent to worker');
 
-        cutListComponent.cutLists = bestCutList;
+            cutListWorker.postMessage([
+                cutPieces,
+                uncutPieces
+            ]);
+
+            cutListWorker.onmessage = function(e) {
+                // Add CutList prototype to each object in array returned
+                e.data.forEach((cutList) => Object.setPrototypeOf(cutList, CutList.prototype));
+
+                cutListComponent.cutLists = e.data;
+                console.log('Message received from worker');
+                console.log(e.data);
+            };
+        } else {
+            console.log('Your browser doesn\'t support web workers.');
+
+            bestCutList = cutListCalculator.getCutLists(
+                cutPieces,
+                uncutPieces,
+                updateCutListProgress
+            );
+    
+            cutListComponent.cutLists = bestCutList;
+        }
     }
 
     function updateCutListProgress(progressPercent) {
-        console.log(`Component: ${progressPercent}`);
+        console.log(`Console Log: ${progressPercent}%`);
+        cutListProgressElement.textContent = `Progress: ${progressPercent}%`;
     }
 
     function showCutListError(errorMsg) {

@@ -87,7 +87,7 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new UncutPiece(2, 4, 144, 462),
     ];
 
-    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new UncutPiece(4, 4, 144, 27.48),
     ];
     
-    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     //cutListCalculatorComponent.init(cutPieces, uncutPieces);
     window.cutListCalculatorComponent = cutListCalculatorComponent;
@@ -128,18 +128,18 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new CutPiece(2, 4, 34, 2),
     ];
 
-    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
     
     console.log('Test: Wood Shed');
 
     uncutPieces = [
-        new UncutPiece(2, 4, 48, 275),
-        new UncutPiece(2, 4, 96, 298),
-        new UncutPiece(2, 4, 120, 386),
-        new UncutPiece(2, 4, 144, 462),
-        new UncutPiece(2, 4, 16*12, 616),
+        new UncutPiece(2, 4, 48, 2.75),
+        new UncutPiece(2, 4, 96, 2.98),
+        new UncutPiece(2, 4, 120, 3.86),
+        new UncutPiece(2, 4, 144, 4.62),
+        new UncutPiece(2, 4, 16*12, 6.16),
     ];
     cutPieces = [
         new CutPiece(2, 4, 15*12+11, 4),
@@ -152,8 +152,10 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
     ];
 
     // ISSUE: Very long time
-    //debugger;
-    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    // debugger;
+    // cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    cutListCalculatorComponent.init(cutPieces, uncutPieces);
+    return;
 
     // ------------------------------------------------------------------------
 

@@ -2,9 +2,13 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: './src/index.js',
+    //entry: './src/index.js',
+    entry: {
+        index: './src/index.js',
+        worker: './src/js/cutListWorker.js',
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
     },
     devtool: 'inline-source-map',
