@@ -13,6 +13,15 @@
     box-shadow: 0px 0px 10px var(--base-black, black);
 }
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 :root {
     --base-white: hsl(0, 0%, 95%);
     --base-black: hsl(0, 0%, 10%);
@@ -46,13 +55,11 @@ html {
 }
 
 body {
-    @include customBoxShadow();
+    //@include customBoxShadow();
 
     font-size: 1.6rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     min-height: 100vh;
-    max-width: 100rem;
-    margin: 0 auto;
 
     display: grid;
     // TODO: Update for simple 3 row design insteads of 3row x 2column
@@ -70,6 +77,14 @@ footer {
     padding: 1.8rem;
 }
 
+header, footer {
+    background-image: url("../images/wood_pattern.svg");
+    background-size: contain;
+    background-color: var(--primary-bg);
+    color: var(--primary-bg-text, white);
+    box-shadow: 0 0 1rem var(--base-black, black);
+}
+
 // Header
 
 header {
@@ -80,8 +95,9 @@ header {
 
 main {
     grid-area: main;
-    // display: grid;
-    // grid-gap: 1em;
+    max-width: 100rem;
+    margin: 0 auto;
+    box-shadow: inset 0 0 0.5rem var(--base-black, black);
 
     > * {
         margin-bottom: 1em;
@@ -99,13 +115,6 @@ footer {
     grid-area: footer;
     display: grid;
     place-items: center;
-}
-
-header, footer {
-    background-image: url("../images/wood_pattern.svg");
-    background-size: contain;
-    background-color: var(--primary-bg);
-    color: var(--primary-bg-text, white);
 }
 
 // Custom IDs
@@ -266,6 +275,32 @@ header, footer {
     .cut-piece-inst-container:nth-child(even),
     .uncut-piece-inst-container:nth-child(even) {
         background-color: hsl(0, 0%, 75%);
+    }
+}
+
+.progress-container {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    gap: 1rem;
+
+    &.hide {
+        display: none;
+    }
+
+    &:not(.hide) {
+        .progress-icon-container {
+            animation: spin 1500ms ease-in-out infinite;
+        }
+    }
+
+    .progress-value {
+
+    }
+
+    .progress-icon-container {
+        font-size: 5rem;
+        color: var(--primary-bg, black);
     }
 }
 

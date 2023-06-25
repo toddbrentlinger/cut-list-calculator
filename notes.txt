@@ -1,0 +1,5 @@
+6/23/23
+
+X Change getCutLists progressCallback to postMessage instead of console.log.
+Back in cutListCalculator onmessage, if e.data is just a number, use as parameter 
+to update progress bar instead of setting bestCutLists.

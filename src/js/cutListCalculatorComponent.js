@@ -5,6 +5,8 @@ import UncutPieceSectionComponent from "./components/uncutPieceSectionComponent.
 
 import CutListComponent from "./components/cutListComponent.js";
 
+import ProgressBarComponent from "./components/progressBarComponent.js";
+
 import cutListCalculator from "./cutListCalculator.js";
 
 import { createElement } from "./utilities.js";
@@ -13,12 +15,12 @@ import { CutList } from "./cutList.js";
 const cutListCalculatorComponent = (() => {
     const cutPieceSectionComponent = CutPieceSectionComponent();
     const uncutPieceSectionComponent = UncutPieceSectionComponent();
+    const cutListProgressElement = ProgressBarComponent();
 
     let bestCutList;
     
     let cutListComponent;
     let cutListErrorElement;
-    let cutListProgressElement;
 
     function init(initCutPieces = [], initUncutPieces = [], initBestCutList = undefined) {
         bestCutList = initBestCutList;
@@ -61,8 +63,8 @@ const cutListCalculatorComponent = (() => {
         );
 
         // Add progress bar for cut list
-        cutListProgressElement = mainElement.appendChild(
-            createElement('div', {'id': 'cut-list-progress', 'class': 'hide'})
+        mainElement.appendChild(
+            cutListProgressElement.render()
         );
 
         // Add calculated cut list
@@ -92,6 +94,10 @@ const cutListCalculatorComponent = (() => {
         // If reach here, no errors to show. Remove any previous errors.
         clearCutListError();
 
+        // Unhide progress element and initialize with 0
+        cutListProgressElement.update(0);
+        cutListProgressElement.unhide();
+
         // Temporary flag used before I can figure out how to implement Worker
         const useWorkerFlag = true;
 
@@ -100,20 +106,24 @@ const cutListCalculatorComponent = (() => {
                 './worker.bundle.js'
             );
 
-            console.log('Message sent to worker');
-
             cutListWorker.postMessage([
                 cutPieces,
                 uncutPieces
             ]);
 
             cutListWorker.onmessage = function(e) {
-                // Add CutList prototype to each object in array returned
-                e.data.forEach((cutList) => Object.setPrototypeOf(cutList, CutList.prototype));
+                if (Array.isArray(e.data)) {
+                    // Add CutList prototype to each object in array returned
+                    e.data.forEach((cutList) => Object.setPrototypeOf(cutList, CutList.prototype));
 
-                cutListComponent.cutLists = e.data;
-                console.log('Message received from worker');
-                console.log(e.data);
+                    // Assign cut lists to cut list component
+                    cutListComponent.cutLists = e.data;
+
+                    // Hide progress element
+                    cutListProgressElement.hide();
+                } else if (!isNaN(e.data)) {
+                    updateCutListProgress(e.data);
+                }
             };
         } else {
             console.log('Your browser doesn\'t support web workers.');
@@ -129,8 +139,7 @@ const cutListCalculatorComponent = (() => {
     }
 
     function updateCutListProgress(progressPercent) {
-        console.log(`Console Log: ${progressPercent}%`);
-        cutListProgressElement.textContent = `Progress: ${progressPercent}%`;
+        cutListProgressElement.update(progressPercent);
     }
 
     function showCutListError(errorMsg) {

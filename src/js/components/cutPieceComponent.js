@@ -56,11 +56,11 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
             createElement('div', {'class': 'cut-piece'})
         );
         
-        const editBtn = createElement('button', {}, 
-            createElement('span', {'class': 'fa-solid fa-pen-to-square', 'aria-label': 'Edit'})
+        const editBtn = createElement('button', {'aria-label': 'Edit', 'title': 'Edit'}, 
+            createElement('span', {'class': 'fa-solid fa-pen-to-square'})
         );
-        const deleteBtn = createElement('button', {}, 
-            createElement('span', {'class': 'fa-solid fa-trash-can', 'aria-label': 'Delete'})
+        const deleteBtn = createElement('button', {'aria-label': 'Delete', 'title': 'Delete'}, 
+            createElement('span', {'class': 'fa-solid fa-trash-can'})
         );
 
         // Add event listeners for buttons
