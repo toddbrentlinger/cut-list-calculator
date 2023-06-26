@@ -1,6 +1,7 @@
 import { createElement } from "../utilities.js";
 import CutSequenceComponent from "./cutSequenceComponent.js";
 import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export default function CutListComponent(cutLists = []) {
     let element;
@@ -14,40 +15,41 @@ export default function CutListComponent(cutLists = []) {
     }
 
     const saveCutListAsPDF = function() {
-        // Default export is a4 paper, portrait, using millimeters for units
-        const doc = new jsPDF({
-            orientation: 'landscape',
-            unit: 'mm',
-            format: 'letter',
+        const doc = new jsPDF();
+        const margin = 15;
+        var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+
+        doc.text(
+            'Material List', 
+            pageWidth / 2, 
+            margin, 
+            { align: 'center', }
+        );
+        
+        doc.autoTable({ 
+            html: '#material-list-table',
+            startY: margin + 5,
+            margin: { horizontal: margin, },
+            theme: 'grid',
+            headStyles: { fillColor: [ 123, 82, 37 ], },
+        });
+        
+        doc.text(
+            'Cut Sequences', 
+            pageWidth / 2, 
+            doc.autoTable.previous.finalY + 10,
+            { align: 'center', }
+        );
+        
+        doc.autoTable({ 
+            html: '#cut-sequences-table',
+            startY: doc.autoTable.previous.finalY + 15,
+            margin: { horizontal: margin, },
+            theme: 'grid',
+            headStyles: { fillColor: [ 123, 82, 37 ], },
         });
 
-        const margin = 0;
-        const pageWidth = 280;
-
-        doc.html(document.getElementById('cut-list'), {
-            callback: function(doc) {
-                //debugger;
-                doc.save('cut-list.pdf');
-            },
-            margin: margin,
-            //autoPaging: 'text',
-            width: pageWidth - 2 *margin, // target width
-            windowWidth: pageWidth - 2 * margin, // window width
-            html2canvas: {
-                onclone: (doc) => {
-                    //debugger;
-                },
-                //allowTaint: true,
-                logging: false,
-                scale: .5,
-                // width: 100, // width of canvas
-                // height: 100, // height of canvas
-                // x: 50, // crop canvas-x coord
-                // y: 50, // crop canvas-y coord
-                // windowWidth: 300,
-                // windowHeight: 300, 
-            },
-        });
+        doc.save(`cut-list-${(new Date()).toISOString()}.pdf`);
     };
 
     const render = function() {
@@ -67,6 +69,7 @@ export default function CutListComponent(cutLists = []) {
         
         // Material List - Table
         const materialListTable = element.appendChild(document.createElement('table'));
+        materialListTable.id = 'material-list-table';
 
         // Material List - Table Head
         materialListTable.appendChild(createElement('thead', {}, 
@@ -81,7 +84,6 @@ export default function CutListComponent(cutLists = []) {
 
         // Material List - Table Body
         const materialListsArr = cutLists.map((cutList) => cutList.getMaterialList());
-        //const materialList = cutList.getMaterialList();
         const materialListTableBody = materialListTable.appendChild(document.createElement('tbody'));
         let totalPrice = 0;
         let currPrice;
@@ -112,6 +114,7 @@ export default function CutListComponent(cutLists = []) {
 
         // Cut Sequences - Table
         const cutSequencesTable = element.appendChild(document.createElement('table'));
+        cutSequencesTable.id = 'cut-sequences-table';
 
         // Cut Sequences - Table Head
         cutSequencesTable.appendChild(createElement('thead', {}, 
@@ -147,7 +150,9 @@ export default function CutListComponent(cutLists = []) {
         clear();
         render();
         
-        element.scrollIntoView();
+        element.scrollIntoView({
+            behavior: 'smooth',
+        });
     };
 
     return {

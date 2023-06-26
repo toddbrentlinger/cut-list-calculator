@@ -10,9 +10,8 @@ export default function ProgressBarComponent() {
 
     const unhide = function() {
         containerElement.classList.remove('hide');
-        containerElement.scrollTo({
-            top: containerElement.clientHeight,
-            behavior: 'smooth'
+        containerElement.scrollIntoView({
+            behavior: 'smooth',
         });
     };
 

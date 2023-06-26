@@ -18,6 +18,7 @@ const cutListCalculatorComponent = (() => {
     const cutListProgressElement = ProgressBarComponent();
 
     let bestCutList;
+    let cutListWorker;
     
     let cutListComponent;
     let cutListErrorElement;
@@ -102,7 +103,11 @@ const cutListCalculatorComponent = (() => {
         const useWorkerFlag = true;
 
         if (useWorkerFlag && window.Worker) {
-            const cutListWorker = new Worker(
+            if (cutListWorker !== undefined) {
+                cutListWorker.terminate();
+            }
+
+            cutListWorker = new Worker(
                 './worker.bundle.js'
             );
 

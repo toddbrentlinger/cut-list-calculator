@@ -1,3 +1,7 @@
+6/25/23
+
+X Cancel worker if new worker is started while still running.
+
 6/23/23
 
 X Change getCutLists progressCallback to postMessage instead of console.log.
