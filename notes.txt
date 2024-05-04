@@ -1,3 +1,27 @@
+5/3/24
+
+- Add CutPiece list to final CutList or maybe just when saving as PDF.
+
+- Add identifier to each CutPiece. In final CutList, display CutPiece identifier 
+next to CutPiece in a CutSequence to help identify where the cuts go.
+
+4/25/24
+
+- Before calculating CutLists, check if largest UncutPiece length 
+is equal to or larger than largest CutPiece. Display error telling 
+User to either add UncutPiece long enough OR change length of 
+longest CutPiece.
+
+- If current number of available uncut lengths add up to price more than best
+cut list, no need to check current configuration AND can skip checking adding
+more uncut length.
+
+- Should be able to write different format of numbers:
+9'14-1/4" or 9' 14-1/4" or 9' 14 1/4" etc
+9.25 (unitless value)
+9.25' (9'4")
+9.25" (9-1/4")
+
 6/25/23
 
 X Cancel worker if new worker is started while still running.
@@ -7,3 +31,10 @@ X Cancel worker if new worker is started while still running.
 X Change getCutLists progressCallback to postMessage instead of console.log.
 Back in cutListCalculator onmessage, if e.data is just a number, use as parameter 
 to update progress bar instead of setting bestCutLists.
+
+README Notes:
+
+Worker
+If pass class instance objects into worker, certain things like getters are NOT included.
+[Check if it defaults prototype to Object]. Must set prototype back to appropriate type
+before can use specific class attributes. [Check CutlistCalculator.getCutLists method]
