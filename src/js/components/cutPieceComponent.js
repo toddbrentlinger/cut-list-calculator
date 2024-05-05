@@ -1,4 +1,4 @@
-import { createElement } from "../utilities.js";
+import { createElement, convertNumToImperialWithFraction } from "../utilities.js";
 import CutPieceEditFormComponent from "./cutPieceEditFormComponent.js";
 
 export default function CutPieceComponent(cutPiece, editCallback, deleteCallback) {
@@ -70,9 +70,9 @@ export default function CutPieceComponent(cutPiece, editCallback, deleteCallback
         cutPieceInstElement.append(
             createElement('div', {}, cutPiece.thickness),
             createElement('div', {}, cutPiece.width),
-            createElement('div', {}, cutPiece.length),
+            createElement('div', {}, convertNumToImperialWithFraction(cutPiece.length)),
             createElement('div', {}, cutPiece.quantity),
-            createElement('div', {}, cutPiece.kerf),
+            createElement('div', {}, convertNumToImperialWithFraction(cutPiece.kerf)),
             createElement('div', {'class': 'piece-btn-container'},
                 editBtn,
                 deleteBtn 

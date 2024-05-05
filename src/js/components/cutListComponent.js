@@ -1,4 +1,4 @@
-import { createElement } from "../utilities.js";
+import { createElement, convertNumToImperialWithFraction } from "../utilities.js";
 import CutSequenceComponent from "./cutSequenceComponent.js";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -94,7 +94,7 @@ export default function CutListComponent(cutLists = []) {
                 materialListTableBody.appendChild(createElement('tr', {}, 
                     createElement('td', {}, uncutObj.quantity),
                     createElement('td', {}, uncutObj.crossSection),
-                    createElement('td', {}, uncutLength),
+                    createElement('td', {}, convertNumToImperialWithFraction(uncutLength)),
                     createElement('td', {}, uncutObj.unitPrice),
                     createElement('td', {}, currPrice.toFixed(2))
                 ));

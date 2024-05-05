@@ -1,8 +1,9 @@
-import { createElement } from "../utilities.js";
+import { createElement, convertNumToImperialWithFraction } from "../utilities.js";
 
 export default function CutSequenceComponent(cutSequence) {
     const render = function() {
         const rowElements = [];
+        
         cutSequence.cutPieces.forEach((cutPiece, index, arr) => {
             const tempRowElement = document.createElement('tr');
 
@@ -20,14 +21,14 @@ export default function CutSequenceComponent(cutSequence) {
 
             // Cut Pieces
             tempRowElement.appendChild(
-                createElement('td', {}, cutPiece.length)
+                createElement('td', {}, convertNumToImperialWithFraction(cutPiece.length))
             );
 
             // Remaining Length (last row only)
             // Add remaining length if last row OR row that spans rest of rows for this cut sequence.
             if (index === (arr.length - 1)) {
                 tempRowElement.appendChild(
-                    createElement('td', {}, `with ${cutSequence.remainingLength} remaining`)
+                    createElement('td', {}, `with ${convertNumToImperialWithFraction(cutSequence.remainingLength)} remaining`)
                 );
             } else if (index === 0) {
                 tempRowElement.appendChild(

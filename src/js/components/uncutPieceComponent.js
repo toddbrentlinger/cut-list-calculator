@@ -1,4 +1,4 @@
-import { createElement } from "../utilities.js";
+import { createElement, convertNumToImperialWithFraction } from "../utilities.js";
 import UncutPieceEditFormComponent from "./uncutPieceEditFormComponent.js";
 
 export default function UncutPieceComponent(uncutPiece, editCallback, deleteCallback) {
@@ -69,7 +69,7 @@ export default function UncutPieceComponent(uncutPiece, editCallback, deleteCall
         uncutPieceInstElement.append(
             createElement('div', {}, uncutPiece.thickness),
             createElement('div', {}, uncutPiece.width),
-            createElement('div', {}, uncutPiece.length),
+            createElement('div', {}, convertNumToImperialWithFraction(uncutPiece.length)),
             createElement('div', {}, uncutPiece.price),
             createElement('div'),
             createElement('div', {'class': 'piece-btn-container'}, 
