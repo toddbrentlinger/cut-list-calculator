@@ -102,7 +102,7 @@ export function addCommasToNumber(num) {
 export function createDurationString(durationMilliseconds) {
     // If duration is less than one second, return duration as milliseconds
     if (durationMilliseconds < 1000) {
-        return durationMilliseconds + ' milliseconds';
+        return `${durationMilliseconds} millisecond${(durationMilliseconds !== 1) ? 's' : ''}`;
     }
 
     // Array to hold strings for each time scale (days, hours, etc.)
@@ -144,7 +144,7 @@ export function createDurationString(durationMilliseconds) {
              * scale strings to be joined into one single string later.
              */
             strArr.push(
-                `${digit} ${str}${((digit > 1) ? 's' : '')}`
+                `${digit} ${str}${(digit !== 1) ? 's' : ''}`
             );
         }
     });
