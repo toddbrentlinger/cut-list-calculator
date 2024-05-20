@@ -315,3 +315,15 @@ export function convertNumToImperialWithFraction(num, maxBase = 5) {
         2**(maxBase + 1)
     );
 }
+
+/**
+ * Clears HTMLElement of any children elements.
+ * @param {HTMLElement} element 
+ */
+export function clearElement(element) {
+    if (!(element instanceof HTMLElement)) { return; }
+
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}

@@ -1,31 +1,70 @@
-import { createElement } from "../utilities.js";
+import { createElement, clearElement } from "../utilities.js";
 import ConfirmModalComponent from "./confirmModalComponent.js";
 import UncutPiece from "../uncutPiece.js";
 import UncutPieceComponent from "./uncutPieceComponent.js";
 import UncutPieceCreateFormComponent from "./uncutPieceCreateFormComponent.js";
 import UncutPieceListComponent from "./uncutPieceListComponent.js";
+import cutListCalculatorStorage from "../cutListCalculatorStorage.js";
 
+/**
+ * @typedef {Object} UncutPieceSectionComponent
+ * @property {Function} addUncutPiece - Adds new UncutPiece to displayed list of UncutPieces
+ * @property {Function} getUncutPieces - Returns array of UncutPieces displayed
+ * @property {Function} render - Returns HTMLElement of UncutPiece component section that displays all UncutPieces
+ */
 
-export default function UncutPieceSectionComponent() {
+/**
+ * Factory function to create HTMLElement component section to hold UncutPieceComponents.
+ * @returns {UncutPieceSectionComponent}
+ */
+function UncutPieceSectionComponent() {
+    /** Reference to container HTMLElement of component. */
     let element;
+
+    /** Reference to HTMLElement that displays list of UncutPieces. */
     const uncutPieceListComponent = UncutPieceListComponent();
 
+    /**
+     * Returns array of UncutPieces displayed.
+     * @returns {UncutPiece[]}
+     */
     const getUncutPieces = function() {
         return uncutPieceListComponent.getPieces();
     };
 
+    /**
+     * Adds and returns new UncutPiece to displayed list of UncutPieces.
+     * @param {UncutPiece} uncutPiece 
+     * @returns {UncutPiece}
+     */
     const addUncutPiece = function(uncutPiece) {
+        /**
+         * Add new UncutPieceComponent to list of UncutPieceComponents using 
+         * instance of UncutPiece.
+         */
         uncutPieceListComponent.addUncutPieceComponent(
-            UncutPieceComponent(uncutPiece, handleUncutPieceEditClick, handleUncutPieceDeleteClick)
+            UncutPieceComponent(uncutPiece, handleUncutPieceDeleteClick)
         );
+
+        // Save new UncutPiece to database storage
+        cutListCalculatorStorage.saveUncutPiece(uncutPiece);
 
         return uncutPiece;
     };
 
+    /** Removes UncutPiece from displayed list of UncutPieces.  */
     const removeUncutPiece = function(uncutPieceToRemove) {
+        // Delete UncutPiece from storage database
+        cutListCalculatorStorage.deleteUncutPiece(uncutPieceToRemove);
+        
+        // Remove UncutPiece from list of displayed UncutPieces
         uncutPieceListComponent.removeUncutPiece(uncutPieceToRemove);
     };
 
+    /**
+     * Event handler function when new UncutPiece is submitted by User.
+     * @param {Event} e 
+     */
     const handleUncutPieceAddFormSubmit = function(e) {
         e.preventDefault();
 
@@ -37,29 +76,19 @@ export default function UncutPieceSectionComponent() {
             Number(e.target.elements.namedItem('price').value),
         );
         
+        // Add new UncutPiece to displayed list of UncutPieces
         addUncutPiece(uncutPiece);
     };
 
-    const handleUncutPieceEditClick = function(e, oldUncutPiece) {
-        // Create a new UncutPiece from form input values
-        const newUncutPiece = new UncutPiece(
-            Number(e.target.elements.namedItem('thickness').value),
-            Number(e.target.elements.namedItem('width').value),
-            Number(e.target.elements.namedItem('length').value),
-            Number(e.target.elements.namedItem('price').value),
-        );
-        
-        // Check that new UncutPiece is not a duplicate thickness x width x length combo
-        uncutPieceListComponent.getPieces().forEach((uncutPiece) => {
-            if (uncutPiece !== oldUncutPiece && uncutPiece === newUncutPiece) {
-                return;
-            }
-        });
-
-        // If reach here, new UncutPiece is valid
-    };
-
+    /**
+     * Event handler function when UncutPiece is selected to be deleted by User.
+     * @param {UncutPiece} uncutPieceToDelete 
+     */
     const handleUncutPieceDeleteClick = function(uncutPieceToDelete) {
+        /**
+         * Add confirm modal to the DOM, passing event handler to actually 
+         * delete UncutPiece after User confirms.
+         */
         document.body.prepend(
             ConfirmModalComponent(() => {
                 handleUncutPieceDeleteConfirm(uncutPieceToDelete)
@@ -69,36 +98,52 @@ export default function UncutPieceSectionComponent() {
         );
     };
 
+    /**
+     * Event handler function when UncutPiece is confirmed to be deleted by User.
+     * @param {UncutPiece} uncutPieceToDelete 
+     */
     const handleUncutPieceDeleteConfirm = function(uncutPieceToDelete) {
         removeUncutPiece(uncutPieceToDelete);
     };
 
+    /** Event handler function when all UncutPieces are cleared by User. */
     const handleUncutPieceListClear = function() {
-        // Clear uncut pieces displayed
+        // Clear UncutPieces displayed
         uncutPieceListComponent.clear();
+
+        // Delete all UncutPieces from storage database
+        cutListCalculatorStorage.deleteAllUncutPieces();
     };
 
+    /**
+     * Returns HTMLElement of UncutPiece component section that displays all UncutPieces.
+     * @returns {HTMLElement}
+     */
     const render = function() {
+        /**
+         * If main element is NOT yet defined, create new element, else clear 
+         * main element.
+         */
         if (element === undefined) {
             element = createElement('section', {'class': 'piece-section'});
         } else {
-            clearElement();
+            clearElement(element);
         }
 
-        // Uncut Pieces - Header
+        // Piece Header
         element.appendChild(createElement('h2', {}, 'Uncut Pieces:'));
         
-        // Uncut Pieces - Clear Button
+        // Piece Clear Button with event listener
         element.appendChild(
             createElement('div', {'class': 'btn-large-container'})
         ).appendChild(
             createElement('button', {}, 'Clear All Uncut Pieces')
         ).addEventListener('click', handleUncutPieceListClear);
         
-        // Uncut Pieces - List
+        // Pieces List
         element.appendChild(uncutPieceListComponent.render());
         
-        // Uncut Pieces - Create Form
+        // Piece Create Form
         element.appendChild(
             UncutPieceCreateFormComponent(handleUncutPieceAddFormSubmit).render()
         );
@@ -112,3 +157,5 @@ export default function UncutPieceSectionComponent() {
         render,
     };
 }
+
+export default UncutPieceSectionComponent;
