@@ -24,6 +24,44 @@ class CutSequence {
     }
 
     /**
+     * Returns JSON object of the CutSequence.
+     * @returns {Object} obj
+     * @returns {Object} obj.uncutPiece
+     * @returns {Object[]} obj.cutPieces
+     * @returns {number} obj.remainingLength
+     */
+    toJson() {
+        return {
+            uncutPiece: this.uncutPiece.toJson(),
+            cutPieces: this.cutPieces.map((cutPiece) => cutPiece.toJson()),
+            remainingLength: this.remainingLength,
+        };
+    }
+
+    /**
+     * Returns CutSequence given JSON object of a CutSequence.
+     * @param {Object} jsonObj 
+     * @param {Object} jsonObj.uncutPiece
+     * @param {Object[]} jsonObj.cutPieces
+     * @param {number} jsonObj.remainingLength
+     * @returns {CutSequence}
+     */
+    static createFromJson(jsonObj) {
+        // Create UncutPiece from JSON data
+        const uncutPiece = UncutPiece.createFromJson(jsonObj.uncutPiece);
+        
+        // Create array of CutPieces from JSON data
+        const cutPieces = jsonObj.cutPieces
+            .map((cutPieceJson) => CutPiece.createFromJson(cutPieceJson));
+        
+        // Get remaining length from JSON data
+        const remainingLength = jsonObj.remainingLength;
+        
+        // Create and return CutSequence
+        return new CutSequence(uncutPiece, cutPieces, remainingLength);
+    }
+
+    /**
      * Returns array of CutPieces with smallest remaining length from an initial length.
      * @param {number} remainingLength - Length of uncut piece to find CutPieces to fit
      * @param {CutPiece[]} cutPieces - Array of individual CutPieces sorted by length in descending order
