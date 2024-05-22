@@ -1,33 +1,37 @@
 import { addCommasToNumber, createDurationString } from "./utilities.js";
+import LeastSquaresFittingExponential from "./leastSquaresFittingExponential.js";
 
 /**
  * Module to track progress of known number of iterations and display updates 
  * of current progress.
  */
 const cutListCalculatorProgress = (() => {
-    // Number of digits after decimal to display as percentage
+    /** Number of digits after decimal to display as percentage. */
     const decimalDigitsToDisplay = 3;
 
-    // Duration, in milliseconds, between passing progress string to callback
+    /** Duration, in milliseconds, between passing progress string to callback. */
     const updateInterval = 10000;
 
-    // Current number of iterations of progress
+    /** Current number of iterations of progress. */
     let currCount = 0;
 
-    // Maximum number of iterations of progress
+    /** Maximum number of iterations of progress. */
     let maxCount = 1;
     
-    // Function to pass progress string every interval
+    /** Function to pass progress string every interval. */
     let progressCallback = console.log;
     
-    // Last time, in milliseconds, the progress callback was called
+    /** Last time, in milliseconds, the progress callback was called. */
     let lastDisplayDeltaTime = 0;
     
-    // Time, in milliseconds, the current progress was started
+    /** Time, in milliseconds, the current progress was started. */
     let startTime;
 
+    /** Used to estimate remaining time of progress. */
+    let leastSquaresFittingExponential = new LeastSquaresFittingExponential();
+    
     /**
-     * Returns percentage of current progress as values between 0 and 100.
+     * Returns percentage of current progress (ex. return 52.3 for 52.3%).
      * @returns {number}
      */
     function getPercentage() {
@@ -39,7 +43,7 @@ const cutListCalculatorProgress = (() => {
      * @param {number} newCount 
      */
     function setCount(newCount) {
-        // Set current count AND percentage using current count
+        // Update current count
         currCount = newCount;
 
         // If progress has not already started, set start time to now
@@ -55,14 +59,30 @@ const cutListCalculatorProgress = (() => {
          * display current progress using progress callback function.
          */
         if (deltaTime - lastDisplayDeltaTime > updateInterval) {
-            // Estimate how much time is left for remaining iterations
-            const timeLeftEstimate = (
-                (deltaTime / currCount) * (maxCount - currCount)
+            // Save reference to calculated percentage of current progress 
+            const percentage = getPercentage();
+
+            /**
+             * Add data point to leastSquaresFittingExponential to better 
+             * estimate completion time. To avoid numbers overflowing when 
+             * calculating best fit curve, data points should be as small
+             * value as possible. X-coord is nth data point and Y-coord is
+             * percentage as decimal where 1 represents 100%.
+             */
+            leastSquaresFittingExponential.addDataPoint(
+                Math.floor(deltaTime / updateInterval), 
+                (percentage / 100)
             );
+            
+            /**
+             * Use leastSquaresFittingExponential to estimate time left to 
+             * complete calculation.
+             */
+            const timeLeftEstimate = (leastSquaresFittingExponential.solveForX(1) * updateInterval) - deltaTime;
             
             // Pass current progress update string to progress callback function
             progressCallback(
-                `${addCommasToNumber(currCount)} of ${addCommasToNumber(maxCount)} (${getPercentage().toFixed(decimalDigitsToDisplay)}%)\nTime Elapsed: ${createDurationString(deltaTime)}\nTime Left (est.): ${createDurationString(timeLeftEstimate)}`
+                `${addCommasToNumber(currCount)} of ${addCommasToNumber(maxCount)} (${percentage.toFixed(decimalDigitsToDisplay)}%)\nTime Elapsed: ${createDurationString(deltaTime)}\nTime Left (est.): ${createDurationString(timeLeftEstimate)}`
             );
             
             /**
