@@ -2,72 +2,14 @@ import './styles/meyer_reset.scss';
 import './styles/styles.scss';
 import cutListCalculator from './js/cutListCalculator.js';
 import CutPiece from './js/cutPiece.js';
-import {CrossSection, UncutPiece} from './js/uncutPiece.js';
-import {cutList} from './js/cutList.js';
+import UncutPiece from './js/uncutPiece.js';
 import cutListCalculatorComponent from './js/cutListCalculatorComponent.js';
 import '@fortawesome/fontawesome-free/js/fontawesome.min.js';
 import '@fortawesome/fontawesome-free/js/solid.min.js';
 
 (() => {
-    function getCutListWithLeastLeftoverMaterial(cutPieces, possibleLengthsArr) {
-        // Sort cutPieces by length in decreasing order
-        cutPieces.sort((a,b) => b.length - a.length);
-
-        // Create array where each value represents a single quantity cutPiece
-        // instead of normal array of cutPieces that has any number quantity in the
-        // 'quantity' property.
-        let individualCutPieces = cutPieces.flatMap((cutPiece) => {
-            return new Array(cutPiece.quantity)
-                .fill(cutPiece);
-        });
-
-        // Create array where each value represents index in corresponding 
-        // individualCutPieces array. If a individual CutPiece is selected for 
-        // a cut sequence, it's index is removed from this array.
-        let availableCutPiecesByIndex = Array.from(
-            {length: individualCutPieces.length},
-            (value, index) => index
-        );
-
-        let currCutSequence, tempAvailableCutPiecesByIndex, bestCut;
-        let finalCutList = [];
-
-        while (availableCutPiecesByIndex.length) {
-            bestCut = {
-                cutSequence: undefined,
-                availableCutPiecesByIndex: undefined,
-            };
-
-            possibleLengthsArr.forEach((length) => {
-                tempAvailableCutPiecesByIndex = [ ...availableCutPiecesByIndex ];
-
-                currCutSequence = cutList.getCutList(length, individualCutPieces, tempAvailableCutPiecesByIndex);
-                
-                if ((bestCut.cutSequence == undefined) 
-                    || (bestCut.cutSequence[-1] > currCutSequence[-1])
-                ) {
-                    bestCut.cutSequence = currCutSequence;
-                    bestCut.availableCutPiecesByIndex = [...tempAvailableCutPiecesByIndex];
-                }
-            });
-            
-            finalCutList.push(bestCut.cutSequence);
-            availableCutPiecesByIndex = [ ...bestCut.availableCutPiecesByIndex ];
-        }
-        console.log(finalCutList);
-
-        // Get cut list for first possible length
-        
-        // Set bestCutList to first cut list
-        
-        // Get cut list for next possible length
-        
-        // If new cut list has less remaining length than bestCutList, set 
-        // bestCutList to new cut list
-        
-        // Once reach end of possible length array, save bestCutList to final cut list sequence
-
-        // Repeat once again with remaining individualCutPieces
+    function getInches(feet, inches = 0, topFraction = 0, bottomFraction = 32) {
+        return feet * 12 + inches + topFraction / bottomFraction;
     }
 
     // ------------------------------------------------------------------------
@@ -86,8 +28,10 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new UncutPiece(2, 4, 120, 386),
         new UncutPiece(2, 4, 144, 462),
     ];
-
-    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    
+    // $10.70
+    // 3,3,4,5
+    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
 
@@ -107,10 +51,9 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new UncutPiece(4, 4, 144, 27.48),
     ];
     
-    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
-
+    // $52.32
+    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
     //cutListCalculatorComponent.init(cutPieces, uncutPieces);
-    window.cutListCalculatorComponent = cutListCalculatorComponent;
 
     // ------------------------------------------------------------------------
     
@@ -128,7 +71,8 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new CutPiece(2, 4, 34, 2),
     ];
 
-    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    // $16.84
+    cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------
     
@@ -150,10 +94,97 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new CutPiece(2, 4, 2*12+9, 6),
         new CutPiece(2, 4, 2*12+11.5, 2),
     ];
+    
+    // $148.60
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    //cutListCalculatorComponent.init(cutPieces, uncutPieces);
+    //return;
+    // ------------------------------------------------------------------------
 
-    // ISSUE: Very long time
-    // debugger;
-    // cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    console.log('Test: Wood Shed 8x12 with 16" spacing');
+
+    uncutPieces = [
+        //new UncutPiece(2, 4, 48, 3.07),
+        new UncutPiece(2, 4, 7*12, 3.55),
+        new UncutPiece(2, 4, 96, 3.73),
+        new UncutPiece(2, 4, 9*12, 4.65),
+        new UncutPiece(2, 4, 120, 5.42),
+        new UncutPiece(2, 4, 12*12, 6.54),
+        new UncutPiece(2, 4, 16*12, 8.72),
+        // new UncutPiece(2, 6, 4*12, 4.92),
+        // new UncutPiece(2, 6, 8*12, 6.52),
+        // new UncutPiece(2, 6, 10*12, 8.72),
+        // new UncutPiece(2, 6, 14*12, 11.97),
+        // new UncutPiece(2, 6, 16*12, 13.98),
+    ];
+    
+    cutPieces = [
+        new CutPiece(2, 4, getInches(12), 6),
+        new CutPiece(2, 4, getInches(11,5), 2),
+        new CutPiece(2, 4, getInches(8), 2),
+        new CutPiece(2, 4, getInches(7,9), 10),
+        new CutPiece(2, 4, getInches(7,5), 3),
+        new CutPiece(2, 4, getInches(7), 35),
+        new CutPiece(2, 4, getInches(6,6,1,2), 4),
+        new CutPiece(2, 4, getInches(3,10,1,8), 4),
+        new CutPiece(2, 4, getInches(3,5,3,8), 4),
+        new CutPiece(2, 4, getInches(2,5,23), 4),
+        new CutPiece(2, 4, getInches(1,10,23), 2),
+        new CutPiece(2, 4, getInches(1,2,1,2), 27),
+        new CutPiece(2, 4, getInches(1,1,3,4), 2),
+        new CutPiece(2, 4, getInches(1,1,1,8), 2),
+        new CutPiece(2, 4, getInches(1,1), 4),
+        new CutPiece(2, 4, getInches(1,0,1,4), 4),
+        new CutPiece(2, 4, getInches(0,10,1,4), 2),
+        new CutPiece(2, 4, getInches(0,8,1,2), 2),
+        new CutPiece(2, 4, getInches(0,8,5), 4),
+        new CutPiece(2, 4, getInches(0,2,27), 4),
+        new CutPiece(2, 6, getInches(5,6), 2),
+        new CutPiece(2, 6, getInches(4,10,9,16), 24),
+        new CutPiece(2, 6, getInches(1,2,1,2), 14),
+        new CutPiece(2, 6, getInches(1,1,3,4), 4),
+    ];
+    
+    // $289.82
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
+    //cutListCalculatorComponent.init(cutPieces, uncutPieces);
+    //return;
+
+    // ------------------------------------------------------------------------
+
+    console.log('Test: Wood Shed 8x12 with 24" spacing');
+    
+    cutPieces = [
+        new CutPiece(2, 4, getInches(12), 6),
+        new CutPiece(2, 4, getInches(11,5), 2),
+        new CutPiece(2, 4, getInches(8), 2),
+        new CutPiece(2, 4, getInches(7,9), 10),
+        new CutPiece(2, 4, getInches(7,5), 3),
+        new CutPiece(2, 4, getInches(7), 27),
+        new CutPiece(2, 4, getInches(6,6,1,2), 4),
+        new CutPiece(2, 4, getInches(3,8,17), 4),
+        new CutPiece(2, 4, getInches(3,5,3,8), 4),
+        new CutPiece(2, 4, getInches(2,5,23), 4),
+        new CutPiece(2, 4, getInches(1,10,23), 2),
+        new CutPiece(2, 4, getInches(1,10,1,2), 10),
+        new CutPiece(2, 4, getInches(1,8,1,4), 4),
+        new CutPiece(2, 4, getInches(1,7,3,8), 4),
+        new CutPiece(2, 4, getInches(1,6,1,4), 2),
+        new CutPiece(2, 4, getInches(1,2,1,2), 9),
+        new CutPiece(2, 4, getInches(1,1,3,4), 2),
+        new CutPiece(2, 4, getInches(1,1,1,8), 2),
+        new CutPiece(2, 4, getInches(1,0,1,2), 4),
+        new CutPiece(2, 4, getInches(0,7,1,2), 2),
+        new CutPiece(2, 4, getInches(0,5,1,2), 4),
+        //new CutPiece(2, 6, getInches(13,4,5), 2),
+        // new CutPiece(2, 6, getInches(5,6), 2),
+        // new CutPiece(2, 6, getInches(4,10,9,16), 18),
+        // new CutPiece(2, 6, getInches(1,10,1,2), 8),
+        // new CutPiece(2, 6, getInches(1,9,3,4), 4),
+    ];
+    
+    // $265.35 (2x4 only)
+    //cutListCalculator.getCheapestCutList(cutPieces, uncutPieces);
     cutListCalculatorComponent.init(cutPieces, uncutPieces);
     return;
 
@@ -182,8 +213,8 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
         new UncutPiece(2, 4, 144, 4.62),
     ];
 
-    let cutLists = cutListCalculator.getCutLists(cutPieces, uncutPieces);
-    console.log(cutLists);
+    // let cutLists = cutListCalculator.getCutLists(cutPieces, uncutPieces);
+    // console.log(cutLists);
     cutListCalculatorComponent.init(cutPieces, uncutPieces);
 
     // ------------------------------------------------------------------------

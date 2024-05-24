@@ -66,7 +66,7 @@ class CutSequence {
      * @param {number} remainingLength - Length of uncut piece to find CutPieces to fit
      * @param {CutPiece[]} cutPieces - Array of individual CutPieces sorted by length in descending order
      * @param {CountArray} cutPieceQuantities - CountArray of current quantites of each CutPiece
-     * @returns {[...CutPiece, number]} Array of CutPieces sub array of selected CutPieces and any remaining length leftover
+     * @returns {[CutPiece[], number]} Array of CutPieces sub array of selected CutPieces and any remaining length leftover
      */
     static createCutSequenceArr(remainingLength, cutPieces, cutPieceQuantities) {
         /** Array of CutPieces that can be cut from remainingLength */

@@ -1,3 +1,11 @@
+5/19/24
+
+- cutPieceComponent and uncutPieceComponet have functionality that can be 
+combined into base class. Convert factory function to class?
+Same with cutPieceSectionComponent AND cutPieceListComponent
+
+- Add confirm modal when User clears all CutPieces/UncutPieces
+
 5/3/24
 
 - Add CutPiece list to final CutList or maybe just when saving as PDF.

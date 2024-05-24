@@ -5,6 +5,6 @@ onmessage = function(e) {
         ...e.data,
         postMessage
     );
-
+    
     postMessage(bestCutLists);
 };
