@@ -327,3 +327,21 @@ export function clearElement(element) {
         element.removeChild(element.firstChild);
     }
 }
+
+/**
+ * Limits the frequency of function calls using debounce technique.
+ * @param {Function} func 
+ * @param {number} delay
+ * @returns {Function}
+ */
+export function debounce(func, context, delay = 100) {
+    let timer;
+    
+    return (...args) => {
+        clearTimeout(timer);
+        
+        timer = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    };
+}

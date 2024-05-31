@@ -1,3 +1,4 @@
+import { RotatingLabelsResizeObserver } from "../rotatingLabels.js";
 import { createElement } from "../utilities.js";
 
 export default function CutPieceListComponent() {
@@ -67,13 +68,19 @@ export default function CutPieceListComponent() {
         }
 
         // Add labels for list (table head)
+        const tableHeaders = [
+            createElement('div', {'class': 'rotating-text-container'}, createElement('span', {'class': 'rotating-text-content'}, 'Thickness')),
+            createElement('div', {'class': 'rotating-text-container'}, createElement('span', {'class': 'rotating-text-content'}, 'Width')),
+            createElement('div', {'class': 'rotating-text-container'}, createElement('span', {'class': 'rotating-text-content'}, 'Length')),
+            createElement('div', {'class': 'rotating-text-container'}, createElement('span', {'class': 'rotating-text-content'}, 'Quantity')),
+            createElement('div', {'class': 'rotating-text-container'}, createElement('span', {'class': 'rotating-text-content'}, 'Kerf'))
+        ];
+
+        new RotatingLabelsResizeObserver(...tableHeaders);
+
         element.appendChild(
-            createElement('div', {'class': 'piece-list-head'}, 
-                createElement('div', {}, 'Thickness'),
-                createElement('div', {}, 'Width'),
-                createElement('div', {}, 'Length'),
-                createElement('div', {}, 'Quantity'),
-                createElement('div', {}, 'Kerf')
+            createElement('div', {'class': 'piece-list-head rotating-text-head'}, 
+                ...tableHeaders
             )
         );
 
