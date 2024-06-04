@@ -37,3 +37,8 @@ Asynchronous ...
 <p>
 Uses debounce technique to limit the frequence of ...
 </p>
+
+<h2 align="center">Vanilla JavaScript Components</h2>
+
+<p>
+</p>
